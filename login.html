@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - TaskNova</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #080d20;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 420px;
+    background: #151c35;
+    padding: 35px 28px;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(0,0,0,.3);
+}
+
+.logo {
+    text-align: center;
+    color: #a78bfa;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+h2 {
+    text-align: center;
+}
+
+.subtitle {
+    text-align: center;
+    color: #aab2ca;
+    margin-bottom: 25px;
+}
+
+input {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 17px;
+    background: #0c1329;
+    border: 1px solid #35405e;
+    border-radius: 9px;
+    color: white;
+    font-size: 15px;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    background: #8055ed;
+    color: white;
+    border: none;
+    border-radius: 9px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+button:disabled {
+    opacity: .6;
+}
+
+.message {
+    text-align: center;
+    margin-top: 15px;
+    line-height: 1.5;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 25px;
+    color: #aab2ca;
+    font-size: 14px;
+}
+
+a {
+    color: #b69aff;
+    text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">TaskNova</div>
+
+    <h2>Welcome Back!</h2>
+
+    <p class="subtitle">Login to your TaskNova account.</p>
+
+    <form id="loginForm">
+
+        <input
+            id="email"
+            type="email"
+            placeholder="Email Address"
+            required
+        >
+
+        <input
+            id="password"
+            type="password"
+            placeholder="Password"
+            required
+        >
+
+        <button id="loginButton" type="submit">
+            Login
+        </button>
+
+    </form>
+
+    <p id="message" class="message"></p>
+
+    <div class="footer">
+        Don't have an account?
+        <a href="register.html">Create Account</a>
+        <br><br>
+        <a href="index.html">Back to Home</a>
+    </div>
+
+</div>
+
+<script type="module">
+
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const supabase = createClient(
+    'https://nplaagzwpthofvounzma.supabase.co',
+    'sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB'
+);
+
+const form = document.getElementById('loginForm');
+const message = document.getElementById('message');
+const button = document.getElementById('loginButton');
+
+form.addEventListener('submit', async function(event) {
+
+    event.preventDefault();
+
+    button.disabled = true;
+    button.textContent = 'Logging in...';
+
+    const { error } = await supabase.auth.signInWithPassword({
+
+        email: document.getElementById('email').value.trim(),
+
+        password: document.getElementById('password').value
+
+    });
+
+    button.disabled = false;
+    button.textContent = 'Login';
+
+    if (error) {
+        message.textContent = error.message;
+    } else {
+        message.textContent = 'Login successful! Your account is connected.';
+    }
+
+});
+
+</script>
+
+</body>
+</html>
