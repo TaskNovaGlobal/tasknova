@@ -227,6 +227,35 @@ footer {
 <footer>
     © 2026 TaskNova. All rights reserved.
 </footer>
+    <div id="registerBox" style="display:none; max-width:400px; margin:30px auto; padding:25px; background:#17172b; border-radius:15px; color:white;">
+    <h2>Join TaskNova</h2>
+    <p>Create your free account</p>
+
+    <form id="registerForm">
+        <input id="fullName" type="text" placeholder="Full Name" required>
+        <br><br>
+
+        <input id="username" type="text" placeholder="Username" required>
+        <br><br>
+
+        <input id="email" type="email" placeholder="Email Address" required>
+        <br><br>
+
+        <input id="password" type="password" placeholder="Password (minimum 6 characters)" minlength="6" required>
+        <br><br>
+
+        <input id="country" type="text" placeholder="Country" required>
+        <br><br>
+
+        <input id="referral" type="text" placeholder="Referral Code (Optional)">
+        <br><br>
+
+        <button type="submit">Create Account</button>
+        <button type="button" onclick="document.getElementById('registerBox').style.display='none'">Cancel</button>
+    </form>
+
+    <p id="registerMessage"></p>
+    </div>
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -235,43 +264,52 @@ const supabase = createClient(
   'sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB'
 );
 
-window.taskNovaSignup = async function () {
-  const email = prompt('Enter your email address:');
-  if (!email) return;
-
-  const password = prompt('Create a password (at least 6 characters):');
-  if (!password) return;
-
-  const { error } = await supabase.auth.signUp({
-    email: email,
-    password: password
-  });
-
-  if (error) {
-    alert(error.message);
-  } else {
-    alert('Registration submitted! Check your email for confirmation.');
-  }
+window.taskNovaSignup = function () {
+  document.getElementById('registerBox').style.display = 'block';
+  document.getElementById('registerBox').scrollIntoView({ behavior: 'smooth' });
 };
 
 window.taskNovaLogin = async function () {
-  const email = prompt('Enter your email address:');
+  const email = prompt('Enter your email');
   if (!email) return;
 
-  const password = prompt('Enter your password:');
+  const password = prompt('Enter your password');
   if (!password) return;
 
   const { error } = await supabase.auth.signInWithPassword({
-    email: email,
-    password: password
+    email,
+    password
+  });
+
+  alert(error ? error.message : 'Login successful!');
+};
+
+document.getElementById('registerForm').addEventListener('submit', async function (event) {
+  event.preventDefault();
+
+  const message = document.getElementById('registerMessage');
+  message.textContent = 'Creating your account...';
+
+  const { error } = await supabase.auth.signUp({
+    email: document.getElementById('email').value.trim(),
+    password: document.getElementById('password').value,
+    options: {
+      data: {
+        full_name: document.getElementById('fullName').value.trim(),
+        username: document.getElementById('username').value.trim(),
+        country: document.getElementById('country').value.trim(),
+        referral_code: document.getElementById('referral').value.trim()
+      }
+    }
   });
 
   if (error) {
-    alert(error.message);
+    message.textContent = error.message;
   } else {
-    alert('Login successful!');
+    message.textContent = 'Registration successful! Check your email for confirmation.';
+    document.getElementById('registerForm').reset();
   }
-};
+});
 </script>
 </body>
 </html>
