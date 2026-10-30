@@ -231,6 +231,51 @@ footer {
 <footer>
     © 2026 TaskNova. All rights reserved.
 </footer>
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
+const supabase = createClient(
+  'https://nplaagzwpthofvounzma.supabase.co',
+  'PASTE_YOUR_PUBLISHABLE_KEY_HERE'
+);
+
+window.taskNovaSignup = async function () {
+  const email = prompt('Enter your email address:');
+  if (!email) return;
+
+  const password = prompt('Create a password (at least 6 characters):');
+  if (!password) return;
+
+  const { error } = await supabase.auth.signUp({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    alert(error.message);
+  } else {
+    alert('Registration submitted! Check your email for confirmation.');
+  }
+};
+
+window.taskNovaLogin = async function () {
+  const email = prompt('Enter your email address:');
+  if (!email) return;
+
+  const password = prompt('Enter your password:');
+  if (!password) return;
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    alert(error.message);
+  } else {
+    alert('Login successful!');
+  }
+};
+</script>
 </body>
 </html>
