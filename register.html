@@ -152,7 +152,10 @@ const supabase = createClient(
     'https://nplaagzwpthofvounzma.supabase.co',
     'sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB'
 );
-
+const form = document.getElementById('registerForm');
+const message = document.getElementById('message');
+const button = form.querySelector('button[type="submit"]');
+    
 form.addEventListener('submit', async function(event) {
     event.preventDefault();
 
