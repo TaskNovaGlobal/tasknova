@@ -153,46 +153,47 @@ const supabase = createClient(
     'sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB'
 );
 
-const form = document.getElementById('registerForm');
-const message = document.getElementById('message');
-const button = document.getElementById('submitButton');
-
 form.addEventListener('submit', async function(event) {
-
     event.preventDefault();
+
+    const fullName = document.getElementById('fullName').value.trim();
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const country = document.getElementById('country').value.trim();
+    const referralCode = document.getElementById('referral').value.trim();
 
     button.disabled = true;
     button.textContent = 'Creating Account...';
     message.textContent = '';
 
-    const { error } = await supabase.auth.signUp({
-const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-        emailRedirectTo: 'https://tasknovaglobal.github.io/tasknova/confirmed.html',
-        data: {
-            full_name: fullName,
-            username,
-            country,
-            referral_code: referralCode
+    try {
+        const { error } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                emailRedirectTo: 'https://tasknovaglobal.github.io/tasknova/confirmed.html',
+                data: {
+                    full_name: fullName,
+                    username: username,
+                    country: country,
+                    referral_code: referralCode
+                }
+            }
+        });
+
+        if (error) {
+            message.textContent = error.message;
+        } else {
+            message.textContent = 'Registration successful! Please check your email for confirmation.';
+            form.reset();
         }
+    } catch (error) {
+        message.textContent = 'Something went wrong. Please try again.';
+    } finally {
+        button.disabled = false;
+        button.textContent = 'Create Account';
     }
-});
-
-    button.disabled = false;
-    button.textContent = 'Create Account';
-
-    if (error) {
-        message.textContent = error.message;
-        return;
-    }
-
-    message.textContent =
-        'Registration successful! Please check your email for confirmation.';
-
-    form.reset();
-
 });
 
 </script>
