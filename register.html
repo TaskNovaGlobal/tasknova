@@ -166,21 +166,19 @@ form.addEventListener('submit', async function(event) {
     message.textContent = '';
 
     const { error } = await supabase.auth.signUp({
-
-        email: document.getElementById('email').value.trim(),
-
-        password: document.getElementById('password').value,
-
-        options: {
-            data: {
-                full_name: document.getElementById('fullName').value.trim(),
-                username: document.getElementById('username').value.trim(),
-                country: document.getElementById('country').value.trim(),
-                referral_code: document.getElementById('referral').value.trim()
-            }
+const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+        emailRedirectTo: 'https://tasknovaglobal.github.io/tasknova/confirmed.html',
+        data: {
+            full_name: fullName,
+            username,
+            country,
+            referral_code: referralCode
         }
-
-    });
+    }
+});
 
     button.disabled = false;
     button.textContent = 'Create Account';
