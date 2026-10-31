@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskNova Dashboard</title>
+
+<style>
+body {
+    margin: 0;
+    background: #0b1020;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background: #171d35;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    color: #a78bfa;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+button {
+    background: #7c3aed;
+    color: white;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+main {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.welcome {
+    background: #171d35;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.card {
+    background: #171d35;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+.card h3 {
+    color: #a78bfa;
+}
+
+.card p {
+    color: #cbd5e1;
+}
+
+#status {
+    color: #a78bfa;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">TaskNova</div>
+    <button id="logoutButton">Logout</button>
+</header>
+
+<main>
+
+    <section class="welcome">
+        <h1>Welcome to TaskNova!</h1>
+        <p id="memberName">Loading your account...</p>
+        <p id="status">Checking your login...</p>
+    </section>
+
+    <section class="cards">
+
+        <div class="card">
+            <h3>My Wallet</h3>
+            <p>Wallet balance will appear here.</p>
+        </div>
+
+        <div class="card">
+            <h3>Available Tasks</h3>
+            <p>Your available tasks will appear here.</p>
+        </div>
+
+        <div class="card">
+            <h3>My Earnings</h3>
+            <p>Your approved earnings will appear here.</p>
+        </div>
+
+        <div class="card">
+            <h3>Withdrawals</h3>
+            <p>Your withdrawal information will appear here.</p>
+        </div>
+
+        <div class="card">
+            <h3>Referrals</h3>
+            <p>Your referral information will appear here.</p>
+        </div>
+
+    </section>
+
+</main>
+
+<script type="module">
+
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const supabase = createClient(
+    'https://nplaagzwpthofvounzma.supabase.co',
+    ''sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB''
+);
+
+const { data, error } = await supabase.auth.getUser();
+
+if (error || !data.user) {
+    window.location.href = 'login.html';
+} else {
+    const name = data.user.user_metadata.full_name || 'TaskNova Member';
+
+    document.getElementById('memberName').textContent =
+        'Hello, ' + name;
+
+    document.getElementById('status').textContent =
+        'You are successfully logged in!';
+}
+
+document.getElementById('logoutButton').addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    window.location.href = 'login.html';
+});
+
+</script>
+
+</body>
+  </html>
