@@ -3,235 +3,553 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TaskNova Admin Dashboard</title>
+<title>TaskNova | Admin Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-* { box-sizing: border-box; }
-
-body {
-    margin: 0;
-    padding: 20px;
-    background: #0b1020;
-    color: white;
-    font-family: Arial, sans-serif;
+:root{
+  --bg:#101323;--panel:#191e34;--panel2:#202741;
+  --purple:#8b5cf6;--text:#f5f5ff;--muted:#a6acc4;
+  --border:#303750;--green:#22c55e;--red:#ef4444;
 }
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 30px;
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+header{
+  padding:16px 22px;background:#171b2d;border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  position:sticky;top:0;z-index:10
 }
-
-h1 { color: #a78bfa; }
-
-button {
-    background: #7c3aed;
-    color: white;
-    border: none;
-    padding: 11px 18px;
-    border-radius: 8px;
-    cursor: pointer;
+.logo{font-size:23px;font-weight:bold;color:#b69aff}
+.logo span{color:white}
+button{cursor:pointer}
+.logout,.secondary{
+  border:0;background:#303750;color:white;padding:10px 14px;border-radius:8px
 }
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
+.layout{display:flex;min-height:calc(100vh - 60px)}
+aside{
+  width:235px;background:#151a2c;padding:15px 10px;
+  border-right:1px solid var(--border);flex-shrink:0
 }
-
-.card {
-    background: #171f35;
-    border: 1px solid #303b57;
-    border-radius: 12px;
-    padding: 22px 15px;
-    min-height: 125px;
+.nav{
+  display:block;width:100%;text-align:left;padding:13px;margin:3px 0;
+  border:0;border-radius:8px;background:transparent;color:var(--muted);
+  font-size:14px
 }
-
-.icon {
-    font-size: 28px;
-    margin-bottom: 12px;
+.nav.active,.nav:hover{background:#30234e;color:white}
+.nav span{display:inline-block;width:28px}
+main{flex:1;min-width:0;padding:24px}
+.section{display:none}
+.section.active{display:block}
+h1{font-size:25px;margin:0 0 8px}
+h2{font-size:18px;margin:0 0 15px}
+.subtitle{color:var(--muted);margin:0 0 20px}
+.cards{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));
+  gap:14px;margin-bottom:20px
 }
-
-.card h3 {
-    margin: 0;
-    font-size: 16px;
+.card,.panel{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:12px;padding:18px;margin-bottom:16px
 }
-
-.number {
-    font-size: 28px;
-    color: #a78bfa;
-    font-weight: bold;
-    margin-top: 12px;
+.card .label{font-size:13px;color:var(--muted)}
+.card .value{font-size:25px;font-weight:bold;margin-top:10px}
+.card .small{font-size:12px;color:var(--muted);margin-top:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px}
+input,select,textarea{
+  display:block;width:100%;padding:11px;margin:7px 0 14px;
+  background:#11172a;color:white;border:1px solid var(--border);
+  border-radius:8px;font:inherit
 }
-
-#message {
-    color: #fbbf24;
-    margin: 20px 0;
+label{font-size:13px;color:var(--muted)}
+.primary{
+  background:var(--purple);color:white;border:0;border-radius:8px;
+  padding:11px 14px;font-weight:bold
+}
+.primary:hover{background:#7042d8}
+.danger{background:#782b37;color:white;border:0;border-radius:7px;padding:9px 11px}
+.success{background:#17623b;color:white;border:0;border-radius:7px;padding:9px 11px}
+.smallbtn{padding:7px 9px;margin:2px;font-size:12px}
+table{width:100%;border-collapse:collapse;min-width:650px}
+th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:top}
+th{color:#c5b1ff}
+.table-wrap{overflow-x:auto}
+.badge{display:inline-block;padding:5px 8px;border-radius:20px;background:#303750;font-size:11px}
+.badge.pending{background:#493a19;color:#f4d27c}
+.badge.approved,.badge.active,.badge.paid,.badge.rewarded{background:#123d2b;color:#75e5a6}
+.badge.rejected,.badge.suspended{background:#4b2028;color:#ff9ba5}
+.message{display:none;padding:12px;border-radius:8px;margin-bottom:15px}
+.message.error{display:block;background:#48222b;color:#ffb3bc}
+.message.success{display:block;background:#163b2c;color:#a3f0bd}
+.empty{color:var(--muted);padding:15px}
+.actions{display:flex;flex-wrap:wrap;gap:5px}
+.form-box{max-width:650px}
+.help{font-size:12px;color:var(--muted);line-height:1.5}
+@media(max-width:760px){
+ .layout{display:block}
+ aside{width:100%;display:flex;overflow-x:auto;padding:8px;border-right:0}
+ .nav{white-space:nowrap;width:auto;flex-shrink:0}
+ main{padding:15px}
+ header{padding:13px}
 }
 </style>
 </head>
 
 <body>
-
 <header>
-    <h1>TaskNova Admin</h1>
-    <button id="logoutButton">Logout</button>
+  <div class="logo">Task<span>Nova</span> Admin</div>
+  <button class="logout" id="logoutButton">↪ Logout</button>
 </header>
 
-<p id="message">Checking administrator access...</p>
+<div class="layout">
+<aside>
+  <button class="nav active" data-tab="overview"><span>📊</span>Overview</button>
+  <button class="nav" data-tab="tasks"><span>📋</span>Tasks</button>
+  <button class="nav" data-tab="members"><span>👥</span>Members</button>
+  <button class="nav" data-tab="submissions"><span>📤</span>Submissions</button>
+  <button class="nav" data-tab="withdrawals"><span>💸</span>Withdrawals</button>
+  <button class="nav" data-tab="referrals"><span>🎁</span>Referrals</button>
+  <button class="nav" data-tab="settings"><span>⚙️</span>Settings</button>
+  <button class="nav" data-tab="audit"><span>🛡️</span>Audit Logs</button>
+</aside>
 
-<main id="dashboard" style="display:none;">
+<main>
+<div id="notice" class="message"></div>
 
-    <h2>Welcome, Administrator</h2>
-    <p>TaskNova platform overview</p>
+<section class="section active" id="overview">
+  <h1>Admin Overview</h1>
+  <p class="subtitle">Monitor and manage your TaskNova platform.</p>
 
-    <h2>Platform Statistics</h2>
+  <div class="cards">
+    <div class="card"><div class="label">Total Members</div><div class="value" id="totalMembers">0</div></div>
+    <div class="card"><div class="label">Total Tasks</div><div class="value" id="totalTasks">0</div></div>
+    <div class="card"><div class="label">Active Tasks</div><div class="value" id="activeTasks">0</div></div>
+    <div class="card"><div class="label">Pending Submissions</div><div class="value" id="pendingSubmissions">0</div></div>
+    <div class="card"><div class="label">Pending Withdrawals</div><div class="value" id="pendingWithdrawals">0</div></div>
+    <div class="card"><div class="label">Total Referrals</div><div class="value" id="totalReferrals">0</div></div>
+    <div class="card"><div class="label">Paid Referrals</div><div class="value" id="paidReferrals">0</div></div>
+    <div class="card"><div class="label">Member Earnings</div><div class="value" id="memberEarnings">$0.00</div></div>
+  </div>
 
-    <div class="grid">
-
-        <div class="card">
-            <div class="icon">👥</div>
-            <h3>Total Members</h3>
-            <div class="number" id="totalMembers">--</div>
-        </div>
-
-        <div class="card">
-            <div class="icon">📋</div>
-            <h3>Total Tasks</h3>
-            <div class="number" id="totalTasks">--</div>
-        </div>
-
-        <div class="card">
-            <div class="icon">📝</div>
-            <h3>Pending Submissions</h3>
-            <div class="number" id="pendingSubmissions">--</div>
-        </div>
-
-        <div class="card">
-            <div class="icon">💳</div>
-            <h3>Pending Withdrawals</h3>
-            <div class="number" id="pendingWithdrawals">--</div>
-        </div>
-
+  <div class="panel">
+    <h2>Quick Actions</h2>
+    <div class="actions">
+      <button class="primary" data-goto="tasks">＋ Create Task</button>
+      <button class="secondary" data-goto="submissions">Review Submissions</button>
+      <button class="secondary" data-goto="withdrawals">Review Withdrawals</button>
+      <button class="secondary" data-goto="members">Manage Members</button>
     </div>
+  </div>
+</section>
 
-    <h2 style="margin-top:35px;">Admin Features</h2>
+<section class="section" id="tasks">
+  <h1>📋 Task Management</h1>
+  <p class="subtitle">Create tasks and control which tasks members can access.</p>
 
-    <div class="grid">
+  <div class="panel form-box">
+    <h2 id="taskFormTitle">Create New Task</h2>
+    <form id="taskForm">
+      <input type="hidden" id="taskId">
 
-        <div class="card">
-            <div class="icon">👤</div>
-            <h3>Members</h3>
-        </div>
+      <label>Task Title</label>
+      <input id="taskTitle" maxlength="150" required placeholder="Example: Visit a website">
 
-        <div class="card">
-            <div class="icon">📋</div>
-            <h3>Manage Tasks</h3>
-        </div>
+      <label>Description and Instructions</label>
+      <textarea id="taskDescription" rows="4" maxlength="5000" required placeholder="Explain exactly what members must do"></textarea>
 
-        <div class="card">
-            <div class="icon">📝</div>
-            <h3>Submissions</h3>
-        </div>
+      <label>Category</label>
+      <select id="taskCategory" required>
+        <option value="Social Media">Social Media</option>
+        <option value="Watch Videos">Watch Videos</option>
+        <option value="Website Visits">Website Visits</option>
+        <option value="Surveys">Surveys</option>
+        <option value="Product Reviews">Product Reviews</option>
+        <option value="Website Testing">Website Testing</option>
+        <option value="Other">Other</option>
+      </select>
 
-        <div class="card">
-            <div class="icon">💰</div>
-            <h3>Wallets</h3>
-        </div>
+      <label>Reward Amount</label>
+      <input id="taskReward" type="number" min="0.01" step="0.01" required placeholder="Enter reward">
 
-        <div class="card">
-            <div class="icon">💳</div>
-            <h3>Withdrawals</h3>
-        </div>
+      <label>Task Website URL (optional)</label>
+      <input id="taskUrl" type="url" placeholder="https://example.com">
 
-        <div class="card">
-            <div class="icon">🤝</div>
-            <h3>Referrals</h3>
-        </div>
+      <button class="primary" id="saveTaskButton" type="submit">Create Task</button>
+      <button class="secondary" id="cancelEditButton" type="button" hidden>Cancel Edit</button>
+    </form>
+    <p class="help">Only create tasks you have permission to offer. Set rewards you can afford to pay after approval.</p>
+  </div>
 
-        <div class="card">
-            <div class="icon">⚙️</div>
-            <h3>Settings</h3>
-        </div>
+  <div class="panel">
+    <h2>All Tasks</h2>
+    <div id="tasksTable" class="table-wrap"></div>
+  </div>
+</section>
 
-    </div>
+<section class="section" id="members">
+  <h1>👥 Members</h1>
+  <p class="subtitle">View member accounts and manage account access.</p>
+  <div class="panel"><div id="membersTable" class="table-wrap"></div></div>
+</section>
+
+<section class="section" id="submissions">
+  <h1>📤 Task Submissions</h1>
+  <p class="subtitle">Review submitted proof. Approving a submission credits its saved reward to the member's wallet.</p>
+  <div class="panel"><div id="submissionsTable" class="table-wrap"></div></div>
+</section>
+
+<section class="section" id="withdrawals">
+  <h1>💸 Withdrawal Management</h1>
+  <p class="subtitle">Review payout requests. Payments are made manually outside TaskNova.</p>
+  <div class="panel"><div id="withdrawalsTable" class="table-wrap"></div></div>
+</section>
+
+<section class="section" id="referrals">
+  <h1>🎁 Referral Settings</h1>
+  <p class="subtitle">Configure the referral reward program.</p>
+
+  <div class="panel form-box">
+    <form id="referralForm">
+      <label>Referral Program</label>
+      <select id="referralEnabled">
+        <option value="false">Disabled</option>
+        <option value="true">Enabled</option>
+      </select>
+
+      <label>Referral Bonus Amount</label>
+      <input id="referralBonus" type="number" min="0" step="0.01" required>
+
+      <button class="primary" type="submit">Save Referral Settings</button>
+    </form>
+    <p class="help">Referral rewards are intended to be earned after the referred member completes their first approved task. Enabling the program does not automatically guarantee a reward for every registration.</p>
+  </div>
+
+  <div class="panel">
+    <h2>Referral Records</h2>
+    <div id="referralsTable" class="table-wrap"></div>
+  </div>
+</section>
+
+<section class="section" id="settings">
+  <h1>⚙️ Platform Settings</h1>
+  <p class="subtitle">Control the main TaskNova platform settings.</p>
+
+  <div class="panel form-box">
+    <form id="settingsForm">
+      <label>Platform Name</label>
+      <input id="platformName" maxlength="80" required>
+
+      <label>Minimum Withdrawal</label>
+      <input id="minimumWithdrawalInput" type="number" min="5" step="0.01" required>
+
+      <label>Maintenance Mode</label>
+      <select id="maintenanceMode">
+        <option value="false">Off</option>
+        <option value="true">On</option>
+      </select>
+
+      <label>New Registrations</label>
+      <select id="registrationsEnabled">
+        <option value="true">Enabled</option>
+        <option value="false">Disabled</option>
+      </select>
+
+      <button class="primary" type="submit">Save Platform Settings</button>
+    </form>
+    <p class="help">Maintenance mode blocks member dashboard access and member actions. Admin access remains available. Disabling registrations prevents new accounts from being created.</p>
+  </div>
+</section>
+
+<section class="section" id="audit">
+  <h1>🛡️ Audit Logs</h1>
+  <p class="subtitle">Review recorded administrative and platform activity.</p>
+  <div class="panel">
+    <button class="secondary" id="refreshAudit">Refresh Logs</button>
+    <br><br>
+    <div id="auditTable" class="table-wrap"></div>
+  </div>
+</section>
 
 </main>
+</div>
 
-<script type="module">
-import { createClient } from
-'https://esm.sh/@supabase/supabase-js@2';
+<script>
+const SUPABASE_URL = "https://nplaagzwpthofvounzma.supabase.co";
+const SUPABASE_KEY = "sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB";
 
-const supabase = createClient(
-    'https://nplaagzwpthofvounzma.supabase.co',
-    'sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB'
-);
+const supabase = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-const message = document.getElementById('message');
-const dashboard = document.getElementById('dashboard');
+let adminData = null;
+let platformSettings = {};
+let busy = false;
 
-async function loadOverview() {
-
-    const { data, error } = await supabase.rpc(
-        'get_tasknova_admin_overview'
-    );
-
-    if (error) {
-        message.textContent = 'Could not load statistics: ' + error.message;
-        return;
-    }
-
-    document.getElementById('totalMembers').textContent =
-        data.total_members;
-
-    document.getElementById('totalTasks').textContent =
-        data.total_tasks;
-
-    document.getElementById('pendingSubmissions').textContent =
-        data.pending_submissions;
-
-    document.getElementById('pendingWithdrawals').textContent =
-        data.pending_withdrawals;
-
-    message.textContent = 'Administrator access verified.';
+function safe(value){
+  return String(value ?? "").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  })[c]);
 }
 
-async function checkAdmin() {
-
-    const { data: { user }, error } =
-        await supabase.auth.getUser();
-
-    if (error || !user) {
-        window.location.href = 'login.html';
-        return;
-    }
-
-    const { data: isAdmin, error: adminError } =
-        await supabase.rpc('is_tasknova_admin');
-
-    if (adminError || isAdmin !== true) {
-        message.textContent =
-            'Access denied. This account is not an administrator.';
-        return;
-    }
-
-    dashboard.style.display = 'block';
-    await loadOverview();
+function money(value){
+  const amount = Number(value || 0);
+  const currency = platformSettings.currency_code || "USD";
+  try{
+    return new Intl.NumberFormat(undefined,{style:"currency",currency}).format(amount);
+  }catch{
+    return "$"+amount.toFixed(2);
+  }
 }
 
-document.getElementById('logoutButton').addEventListener(
-    'click',
-    async () => {
-        await supabase.auth.signOut();
-        window.location.href = 'login.html';
+function notify(message,type="success"){
+  const box=document.getElementById("notice");
+  box.textContent=message;
+  box.className="message "+type;
+  window.scrollTo({top:0,behavior:"smooth"});
+  setTimeout(()=>box.className="message",7000);
+}
+
+function formatDate(value){
+  if(!value)return "—";
+  const date=new Date(value);
+  return Number.isNaN(date.getTime())?"—":date.toLocaleString();
+}
+
+function badge(status){
+  const value=String(status || "unknown").toLowerCase();
+  return `<span class="badge ${safe(value)}">${safe(value)}</span>`;
+}
+
+function showTab(name){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".nav").forEach(b=>{
+    b.classList.toggle("active",b.dataset.tab===name);
+  });
+  document.getElementById(name)?.classList.add("active");
+}
+
+document.querySelectorAll(".nav").forEach(b=>{
+  b.addEventListener("click",()=>showTab(b.dataset.tab));
+});
+document.querySelectorAll("[data-goto]").forEach(b=>{
+  b.addEventListener("click",()=>showTab(b.dataset.goto));
+});
+
+async function logout(){
+  await supabase.auth.signOut();
+  location.href="login.html";
+}
+document.getElementById("logoutButton").addEventListener("click",logout);
+
+async function checkAdmin(){
+  const {data:userData,error:userError}=await supabase.auth.getUser();
+
+  if(userError || !userData.user){
+    location.href="login.html";
+    return false;
+  }
+
+  const {data,isError}=await supabase.rpc("is_tasknova_admin");
+
+  if(isError || data!==true){
+    document.querySelector("main").innerHTML=`
+      <div class="panel">
+        <h1>Administrator access denied</h1>
+        <p>This account is not authorized to access the TaskNova admin dashboard.</p>
+        <button class="logout" id="deniedLogout">Logout</button>
+      </div>`;
+    document.getElementById("deniedLogout").addEventListener("click",logout);
+    return false;
+  }
+
+  return true;
+}
+
+async function loadAdminData(){
+  const {data,error}=await supabase.rpc("get_tasknova_admin_dashboard");
+
+  if(error){
+    notify("Could not load admin data: "+error.message,"error");
+    return false;
+  }
+
+  adminData=data || {};
+  renderAll();
+  return true;
+}
+
+async function loadSettings(){
+  const {data,error}=await supabase.rpc("get_tasknova_platform_settings");
+
+  if(error){
+    console.error(error);
+    return;
+  }
+
+  let value=data;
+  if(Array.isArray(value))value=value[0];
+  if(typeof value==="string"){
+    try{value=JSON.parse(value)}catch{}
+  }
+
+  if(value && typeof value==="object"){
+    platformSettings=value;
+  }
+
+  document.getElementById("platformName").value=platformSettings.platform_name || "TaskNova";
+  document.getElementById("minimumWithdrawalInput").value=platformSettings.minimum_withdrawal ?? 5;
+  document.getElementById("maintenanceMode").value=String(!!platformSettings.maintenance_mode);
+  document.getElementById("registrationsEnabled").value=String(platformSettings.registrations_enabled !== false);
+}
+
+function renderAll(){
+  const overview=adminData.overview || {};
+
+  document.getElementById("totalMembers").textContent=overview.total_members ?? 0;
+  document.getElementById("totalTasks").textContent=overview.total_tasks ?? 0;
+  document.getElementById("activeTasks").textContent=overview.active_tasks ?? 0;
+  document.getElementById("pendingSubmissions").textContent=overview.pending_submissions ?? 0;
+  document.getElementById("pendingWithdrawals").textContent=overview.pending_withdrawals ?? 0;
+  document.getElementById("totalReferrals").textContent=overview.total_referrals ?? 0;
+  document.getElementById("paidReferrals").textContent=overview.total_paid_referrals ?? 0;
+  document.getElementById("memberEarnings").textContent=money(overview.total_member_earnings);
+
+  renderTasks();
+  renderMembers();
+  renderSubmissions();
+  renderWithdrawals();
+  renderReferrals();
+  loadReferralSettings();
+}
+
+function renderTasks(){
+  const items=adminData.tasks || [];
+  const box=document.getElementById("tasksTable");
+
+  if(!items.length){
+    box.innerHTML='<p class="empty">No tasks have been created yet.</p>';
+    return;
+  }
+
+  box.innerHTML=`
+  <table><thead><tr>
+    <th>Title</th><th>Category</th><th>Reward</th><th>Status</th><th>Actions</th>
+  </tr></thead><tbody>
+  ${items.map(t=>`
+    <tr>
+      <td>${safe(t.title)}</td>
+      <td>${safe(t.category)}</td>
+      <td>${money(t.reward)}</td>
+      <td>${badge(t.status)}</td>
+      <td>
+        <div class="actions">
+          <button class="secondary smallbtn edit-task" data-id="${safe(t.id)}">Edit</button>
+          <button class="secondary smallbtn toggle-task" data-id="${safe(t.id)}" data-status="${safe(t.status)}">
+            ${t.status==="active"?"Deactivate":"Activate"}
+          </button>
+          <button class="danger smallbtn delete-task" data-id="${safe(t.id)}">Delete</button>
+        </div>
+      </td>
+    </tr>`).join("")}
+  </tbody></table>`;
+
+  box.querySelectorAll(".edit-task").forEach(b=>{
+    b.addEventListener("click",()=>editTask(b.dataset.id));
+  });
+  box.querySelectorAll(".toggle-task").forEach(b=>{
+    b.addEventListener("click",()=>toggleTask(b.dataset.id,b.dataset.status));
+  });
+  box.querySelectorAll(".delete-task").forEach(b=>{
+    b.addEventListener("click",()=>deleteTask(b.dataset.id));
+  });
+}
+
+function editTask(id){
+  const task=(adminData.tasks || []).find(t=>String(t.id)===String(id));
+  if(!task)return;
+
+  document.getElementById("taskId").value=task.id;
+  document.getElementById("taskTitle").value=task.title || "";
+  document.getElementById("taskDescription").value=task.description || "";
+  document.getElementById("taskCategory").value=task.category || "Other";
+  document.getElementById("taskReward").value=task.reward ?? "";
+  document.getElementById("taskUrl").value=task.task_url || "";
+  document.getElementById("taskFormTitle").textContent="Edit Task";
+  document.getElementById("saveTaskButton").textContent="Save Changes";
+  document.getElementById("cancelEditButton").hidden=false;
+  showTab("tasks");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function resetTaskForm(){
+  document.getElementById("taskForm").reset();
+  document.getElementById("taskId").value="";
+  document.getElementById("taskFormTitle").textContent="Create New Task";
+  document.getElementById("saveTaskButton").textContent="Create Task";
+  document.getElementById("cancelEditButton").hidden=true;
+}
+document.getElementById("cancelEditButton").addEventListener("click",resetTaskForm);
+
+document.getElementById("taskForm").addEventListener("submit",async event=>{
+  event.preventDefault();
+  if(busy)return;
+
+  const id=document.getElementById("taskId").value;
+  const title=document.getElementById("taskTitle").value.trim();
+  const description=document.getElementById("taskDescription").value.trim();
+  const category=document.getElementById("taskCategory").value;
+  const reward=Number(document.getElementById("taskReward").value);
+  const url=document.getElementById("taskUrl").value.trim();
+
+  if(!title || !description || !Number.isFinite(reward) || reward<=0){
+    notify("Please enter a valid title, description and reward.","error");
+    return;
+  }
+
+  if(url){
+    try{
+      const parsed=new URL(url);
+      if(!["http:","https:"].includes(parsed.protocol))throw new Error();
+    }catch{
+      notify("Please enter a valid HTTP or HTTPS task URL.","error");
+      return;
     }
-);
+  }
 
-checkAdmin();
-</script>
+  busy=true;
+  const button=document.getElementById("saveTaskButton");
+  button.disabled=true;
 
-</body>
-    </html>
+  let result;
+
+  if(id){
+    result=await supabase.rpc("admin_update_task",{
+      p_task_id:id,
+      p_title:title,
+      p_description:description,
+      p_category:category,
+      p_reward:reward,
+      p_task_url:url || null
+    });
+  }else{
+    result=await supabase.rpc("admin_create_task",{
+      p_title:title,
+      p_description:description,
+      p_category:category,
+      p_reward:reward,
+      p_task_url:url || null
+    });
+  }
+
+  busy=false;
+  button.disabled=false;
+
+  if(result.error){
+    notify(result.error.message,"error");
+    return;
+  }
+
+  resetTaskForm();
+  notify(id?"Task updated successfully.":"Task created successfully.");
+  await loadAdminData();
+});
+
+async function toggleTask(id,currentStatus){
+  const next=currentStat
