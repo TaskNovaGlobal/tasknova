@@ -620,7 +620,7 @@ async function loadLogs(){
  rows.forEach(log=>{
   const item=make("div",undefined,"item");
   item.append(make("h3",safe(log.action||log.operation||log.event_type||"Audit event")));
-  item.append(make("p","Table: "+safe(log.table_name)));
+  item.append(make("p","Table: "+safe(log.table_name || log.entity_type || log.table)));
   item.append(make("p","Time: "+safe(log.created_at)));
   item.append(make("p","Record: "+safe(log.record_id)));
   root.append(item);
