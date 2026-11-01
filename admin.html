@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,42 +8,39 @@
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#0b1020;color:#e5e7eb;font-family:Arial,sans-serif}
-header{min-height:65px;background:#151d35;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:10;flex-wrap:wrap}
-header h2{margin:0;color:#a78bfa;font-size:21px}
-.header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-button{border:0;padding:10px 14px;border-radius:7px;background:#7c3aed;color:white;cursor:pointer;font-weight:bold}
+header{background:#151d35;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:10}
+header h2{margin:0;color:#a78bfa}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap}
+button{border:0;padding:11px 14px;border-radius:7px;background:#7c3aed;color:white;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5}
 button:hover{opacity:.85}
-button:disabled{opacity:.5;cursor:wait}
-.logout,.danger{background:#dc3545}
 .secondary{background:#475569}
 .green{background:#15803d}
+.danger,.logout{background:#dc3545}
 .layout{display:flex;min-height:calc(100vh - 65px)}
-aside{width:230px;background:#111a30;padding:18px 12px;flex-shrink:0}
-nav button{display:block;width:100%;text-align:left;margin-bottom:7px;background:transparent;color:#cbd5e1;padding:13px}
-nav button:hover,nav button.active{background:#293451;color:#c4b5fd}
+aside{width:230px;background:#111a30;padding:15px;flex-shrink:0}
+nav button{display:block;width:100%;text-align:left;margin-bottom:7px;background:transparent;color:#cbd5e1}
+nav button.active,nav button:hover{background:#293451;color:#c4b5fd}
 main{padding:22px;width:100%;max-width:1300px;margin:auto;min-width:0}
 .page{display:none}
 .page.active{display:block}
-h1{font-size:25px;margin-top:0}
+h1{font-size:25px}
 h3{color:#c4b5fd}
 .card{background:#151d35;border:1px solid #293451;border-radius:11px;padding:18px;margin-bottom:18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
 .stat{background:#202b48;padding:18px;border-radius:10px}
-.stat strong{display:block;font-size:27px;color:#c4b5fd;margin-top:9px;overflow-wrap:anywhere}
+.stat strong{display:block;font-size:26px;color:#c4b5fd;margin-top:9px}
 input,textarea,select{width:100%;padding:12px;margin:7px 0 14px;background:#0b1020;border:1px solid #394563;border-radius:7px;color:white}
 textarea{min-height:85px}
 label{font-size:14px;color:#cbd5e1}
 .item{background:#202b48;padding:15px;border-radius:9px;margin:12px 0;overflow-wrap:anywhere}
-.item h3{margin:0 0 8px}
-.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
-.small{font-size:13px;color:#94a3b8}
+.item h3{margin-top:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.small,.empty{color:#94a3b8}
 #message{display:none;padding:13px;margin-bottom:15px;border-radius:8px;overflow-wrap:anywhere}
 .success{background:#14532d}
 .error{background:#7f1d1d}
 .menu{display:none}
-.tablewrap{overflow-x:auto}
-.badge{padding:4px 8px;border-radius:5px;background:#334155;font-size:12px}
-.empty{color:#94a3b8;padding:12px 0}
 @media(max-width:750px){
  .layout{display:block}
  aside{width:100%;display:none}
@@ -52,180 +50,177 @@ label{font-size:14px;color:#cbd5e1}
  header{align-items:flex-start}
  .header-actions{width:100%}
  .header-actions button{flex:1}
- h1{font-size:22px}
  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .stat{padding:13px}
- .stat strong{font-size:22px}
 }
-@media(max-width:380px){
- .grid{grid-template-columns:1fr}
- .header-actions button{font-size:12px;padding:9px 8px}
-}
+@media(max-width:380px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
-<body><header>
-  <h2>TaskNova Admin</h2>
-  <div class="header-actions">
-    <button class="menu" id="menuBtn">☰ Menu</button>
-    <button class="secondary" id="memberDashboardBtn">Member Dashboard</button>
-    <button class="logout" id="logoutBtn">Logout</button>
-  </div>
-</header><div class="layout">
+<body>
+
+<header>
+ <h2>TaskNova Admin</h2>
+ <div class="header-actions">
+  <button class="menu" id="menuBtn">☰ Menu</button>
+  <button class="secondary" id="memberDashboardBtn">Member Dashboard</button>
+  <button class="logout" id="logoutBtn">Logout</button>
+ </div>
+</header>
+
+<div class="layout">
 <aside id="sidebar">
 <nav>
-<button class="active" data-page="overview">🏠 Overview</button>
-<button data-page="tasks">📋 Tasks</button>
-<button data-page="members">👥 Members</button>
-<button data-page="submissions">📝 Submissions</button>
-<button data-page="withdrawals">💰 Withdrawals</button>
-<button data-page="referrals">🤝 Referrals</button>
-<button data-page="settings">⚙️ Settings</button>
-<button data-page="logs">📜 Audit Logs</button>
+ <button class="active" data-page="overview">🏠 Overview</button>
+ <button data-page="tasks">📋 Tasks</button>
+ <button data-page="members">👥 Members</button>
+ <button data-page="submissions">📝 Submissions</button>
+ <button data-page="withdrawals">💰 Withdrawals</button>
+ <button data-page="referrals">🤝 Referrals</button>
+ <button data-page="settings">⚙️ Settings</button>
+ <button data-page="logs">📜 Audit Logs</button>
 </nav>
-</aside><main>
-<div id="message"></div><section class="page active" id="overview">
-<h1>🏠 Admin Overview</h1>
-<div class="grid" id="stats">
-<div class="stat">Members<strong>—</strong></div>
-<div class="stat">Tasks<strong>—</strong></div>
-<div class="stat">Active Tasks<strong>—</strong></div>
-<div class="stat">Pending Submissions<strong>—</strong></div>
-<div class="stat">Pending Withdrawals<strong>—</strong></div>
-<div class="stat">Referrals<strong>—</strong></div>
-<div class="stat">Paid Referrals<strong>—</strong></div>
-<div class="stat">Wallet Balance<strong>—</strong></div>
-</div>
-<div class="card">
-<h3>Platform Administration</h3>
-<p>Manage members, tasks, earnings, withdrawals and platform settings from this dashboard.</p>
-<button onclick="showPage('tasks')">📋 Manage Tasks</button>
-<button onclick="showPage('submissions')">📝 Review Submissions</button>
-<button onclick="showPage('withdrawals')">💰 Review Withdrawals</button>
-</div>
-</section><section class="page" id="tasks">
-<h1>📋 Task Management</h1>
-<div class="card">
-<h3>Create New Task</h3>
-<form id="taskForm">
-<label>Task Title</label>
-<input id="taskTitle" required maxlength="150">
-<label>Description</label>
-<textarea id="taskDescription" required maxlength="5000"></textarea>
-<label>Category</label>
-<input id="taskCategory" required placeholder="Surveys, Videos, Website Visits...">
-<label>Reward (USD)</label>
-<input id="taskReward" type="number" min="0.01" step="0.01" required>
-<label>Website URL (optional)</label>
-<input id="taskUrl" type="url" placeholder="https://example.com">
-<button type="submit" id="createBtn">Create Task</button>
-</form>
-</div>
-<div class="card">
-<h3>All Tasks</h3>
-<button class="secondary" onclick="loadTasks()">Refresh Tasks</button>
-<div id="taskList" class="empty">Loading...</div>
-</div>
-</section><section class="page" id="members">
-<h1>👥 Members</h1>
-<div class="card">
-<button class="secondary" onclick="loadAdminData()">Refresh Members</button>
-<div id="memberList" class="empty">Loading...</div>
-</div>
-</section><section class="page" id="submissions">
-<h1>📝 Task Submissions</h1>
-<div class="card">
-<button class="secondary" onclick="loadAdminData()">Refresh Submissions</button>
-<div id="submissionList" class="empty">Loading...</div>
-</div>
-</section><section class="page" id="withdrawals">
-<h1>💰 Withdrawals</h1>
-<div class="card">
-<button class="secondary" onclick="loadAdminData()">Refresh Withdrawals</button>
-<div id="withdrawalList" class="empty">Loading...</div>
-</div>
-</section><section class="page" id="referrals">
-<h1>🤝 Referral Management</h1>
-<div class="card">
-<h3>Referral Settings</h3>
-<label>Referral Programme</label>
-<select id="refEnabled">
-<option value="false">Disabled</option>
-<option value="true">Enabled</option>
-</select>
-<label>Bonus Amount (USD)</label>
-<input id="refBonus" type="number" min="0" step="0.01">
-<p class="small">A referral qualifies after the referred member completes their first approved task.</p>
-<button id="saveReferralBtn">Save Referral Settings</button>
-</div>
-<div class="card">
-<h3>Referral Records</h3>
-<button class="secondary" onclick="loadAdminData()">Refresh Referrals</button>
-<div id="referralList" class="empty">Loading...</div>
-</div>
-</section><section class="page" id="settings">
-<h1>⚙️ Platform Settings</h1>
-<div class="card">
-<form id="settingsForm">
-<label>Platform Name</label>
-<input id="platformName" required>
-<label>Minimum Withdrawal (USD)</label>
-<input id="minimumWithdrawal" type="number" min="5" step="0.01" required>
-<label>Maintenance Mode</label>
-<select id="maintenanceMode">
-<option value="false">Off</option>
-<option value="true">On</option>
-</select>
-<label>New Registrations</label>
-<select id="registrationsEnabled">
-<option value="true">Enabled</option>
-<option value="false">Disabled</option>
-</select>
-<button type="submit">Save Platform Settings</button>
-</form>
-</div>
-</section><section class="page" id="logs">
-<h1>📜 Audit Logs</h1>
-<div class="card">
-<button class="secondary" onclick="loadLogs()">Refresh Logs</button>
-<div id="logList" class="empty">Loading...</div>
-</div>
-</section></main>
-</div><script>
-const SUPABASE_URL="https://nplaagzwpthofvounzma.supabase.co";
-const SUPABASE_KEY="sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB";
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+</aside>
 
-let adminData={};
-let memberStatuses={};
+<main>
+<div id="message"></div>
 
-const $=id=>document.getElementById(id);
-const list=value=>Array.isArray(value)?value:[];
-const safe=value=>value===null||value===undefined||value===""?"—":String(value);
+<section class="page active" id="overview">
+ <h1>🏠 Admin Overview</h1>
+ <div class="grid" id="stats">
+  <div class="stat">Members<strong>—</strong></div>
+  <div class="stat">Tasks<strong>—</strong></div>
+  <div class="stat">Active Tasks<strong>—</strong></div>
+  <div class="stat">Pending Submissions<strong>—</strong></div>
+  <div class="stat">Pending Withdrawals<strong>—</strong></div>
+  <div class="stat">Referrals<strong>—</strong></div>
+  <div class="stat">Paid Referrals<strong>—</strong></div>
+  <div class="stat">Wallet Balance<strong>—</strong></div>
+ </div>
+ <div class="card">
+  <h3>Platform Administration</h3>
+  <p>Manage members, tasks, earnings, withdrawals and platform settings.</p>
+  <button onclick="showPage('tasks')">📋 Manage Tasks</button>
+  <button onclick="showPage('submissions')">📝 Review Submissions</button>
+  <button onclick="showPage('withdrawals')">💰 Review Withdrawals</button>
+ </div>
+</section>
+
+<section class="page" id="tasks">
+ <h1>📋 Task Management</h1>
+ <div class="card">
+  <h3>Create New Task</h3>
+  <form id="taskForm">
+   <label>Task Title</label>
+   <input id="taskTitle" required maxlength="150">
+   <label>Description</label>
+   <textarea id="taskDescription" required maxlength="5000"></textarea>
+   <label>Category</label>
+   <input id="taskCategory" required placeholder="Surveys, Videos, Website Visits...">
+   <label>Reward (USD)</label>
+   <input id="taskReward" type="number" min="0.01" step="0.01" required>
+   <label>Website URL (optional)</label>
+   <input id="taskUrl" type="url" placeholder="https://example.com">
+   <button type="submit" id="createBtn">Create Task</button>
+  </form>
+ </div>
+ <div class="card">
+  <h3>All Tasks</h3>
+  <button class="secondary" onclick="loadTasks()">Refresh Tasks</button>
+  <div id="taskList" class="empty">Tasks will appear here.</div>
+ </div>
+</section>
+
+<section class="page" id="members">
+ <h1>👥 Members</h1>
+ <div class="card">
+  <button class="secondary" onclick="loadAdminData()">Refresh Members</button>
+  <div id="memberList" class="empty">Members will appear here.</div>
+ </div>
+</section>
+
+<section class="page" id="submissions">
+ <h1>📝 Task Submissions</h1>
+ <div class="card">
+  <button class="secondary" onclick="loadAdminData()">Refresh Submissions</button>
+  <div id="submissionList" class="empty">Submissions will appear here.</div>
+ </div>
+</section>
+
+<section class="page" id="withdrawals">
+ <h1>💰 Withdrawals</h1>
+ <div class="card">
+  <button class="secondary" onclick="loadAdminData()">Refresh Withdrawals</button>
+  <div id="withdrawalList" class="empty">Withdrawals will appear here.</div>
+ </div>
+</section>
+
+<section class="page" id="referrals">
+ <h1>🤝 Referral Management</h1>
+ <div class="card">
+  <h3>Referral Settings</h3>
+  <label>Referral Programme</label>
+  <select id="refEnabled">
+   <option value="false">Disabled</option>
+   <option value="true">Enabled</option>
+  </select>
+  <label>Bonus Amount (USD)</label>
+  <input id="refBonus" type="number" min="0" step="0.01">
+  <p class="small">A referral qualifies after the referred member completes their first approved task.</p>
+  <button id="saveReferralBtn">Save Referral Settings</button>
+ </div>
+ <div class="card">
+  <h3>Referral Records</h3>
+  <button class="secondary" onclick="loadAdminData()">Refresh Referrals</button>
+  <div id="referralList" class="empty">Referral records will appear here.</div>
+ </div>
+</section>
+
+<section class="page" id="settings">
+ <h1>⚙️ Platform Settings</h1>
+ <div class="card">
+  <form id="settingsForm">
+   <label>Platform Name</label>
+   <input id="platformName" required>
+   <label>Minimum Withdrawal (USD)</label>
+   <input id="minimumWithdrawal" type="number" min="5" step="0.01" required>
+   <label>Maintenance Mode</label>
+   <select id="maintenanceMode">
+    <option value="false">Off</option>
+    <option value="true">On</option>
+   </select>
+   <label>New Registrations</label>
+   <select id="registrationsEnabled">
+    <option value="true">Enabled</option>
+    <option value="false">Disabled</option>
+   </select>
+   <button type="submit">Save Platform Settings</button>
+  </form>
+ </div>
+</section>
+
+<section class="page" id="logs">
+ <h1>📜 Audit Logs</h1>
+ <div class="card">
+  <button class="secondary" onclick="loadLogs()">Refresh Logs</button>
+  <div id="logList" class="empty">Audit logs will appear here.</div>
+ </div>
+</section>
+</main>
+</div>
+
+<script>
+/* Navigation is registered before Supabase initializes. */
+const $ = id => document.getElementById(id);
 
 function showMessage(message,type="success"){
- $("message").textContent=message;
- $("message").className=type;
- $("message").style.display="block";
+ const box=$("message");
+ box.textContent=message;
+ box.className=type;
+ box.style.display="block";
  window.scrollTo({top:0,behavior:"smooth"});
 }
-function clearMessage(){$("message").style.display="none";}
-
-function make(tag,text,className){
- const el=document.createElement(tag);
- if(text!==undefined)el.textContent=text;
- if(className)el.className=className;
- return el;
+function clearMessage(){
+ $("message").style.display="none";
 }
-function actionButton(label,callback,className=""){
- const b=make("button",label,className);
- b.onclick=callback;
- return b;
-}
-function normalizeDashboard(data){
- if(Array.isArray(data)&&data.length===1&&data[0]&&typeof data[0]==="object")return data[0];
- return data||{};
-}
-
 function showPage(name){
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
@@ -235,35 +230,77 @@ function showPage(name){
  if(button)button.classList.add("active");
  $("sidebar").classList.remove("open");
  clearMessage();
- if(name==="logs")loadLogs();
- if(name==="tasks")loadTasks();
+ if(name==="tasks" && window.db)loadTasks();
+ if(name==="logs" && window.db)loadLogs();
 }
+window.showPage=showPage;
+
 document.querySelectorAll("nav button").forEach(button=>{
  button.addEventListener("click",()=>showPage(button.dataset.page));
 });
-$("menuBtn").onclick=()=>$("sidebar").classList.toggle("open");
-$("memberDashboardBtn").onclick=()=>location.href="dashboard.html";
+$("menuBtn").addEventListener("click",()=>{
+ $("sidebar").classList.toggle("open");
+});
+$("memberDashboardBtn").addEventListener("click",()=>{
+ window.location.href="dashboard.html";
+});
+$("logoutBtn").addEventListener("click",async()=>{
+ if(window.db){
+  try{await window.db.auth.signOut();}catch(e){console.error(e);}
+ }
+ window.location.href="login.html";
+});
 
-async function checkAdmin(){
+/* Supabase connection */
+const SUPABASE_URL="https://nplaagzwpthofvounzma.supabase.co";
+const SUPABASE_KEY="sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB";
+let db=null;
+let adminData={};
+let memberStatuses={};
+window.db=null;
+
+const list=value=>Array.isArray(value)?value:[];
+const safe=value=>value===null||value===undefined||value===""?"—":String(value);
+
+function make(tag,text,className){
+ const el=document.createElement(tag);
+ if(text!==undefined)el.textContent=text;
+ if(className)el.className=className;
+ return el;
+}
+function actionButton(label,callback,className=""){
+ const b=make("button",label,className);
+ b.type="button";
+ b.addEventListener("click",()=>callback().catch(e=>showMessage(e.message||String(e),"error")));
+ return b;
+}
+function normalizeDashboard(data){
+ if(Array.isArray(data)&&data.length===1&&data[0]&&typeof data[0]==="object")return data[0];
+ return data||{};
+}
+function requireDb(){
+ if(!db)throw new Error("Supabase could not load. Check your internet connection and reload the page.");
+}async function checkAdmin(){
+ requireDb();
  const {data:sessionData,error:sessionError}=await db.auth.getSession();
- if(sessionError||!sessionData.session){
-  location.href="login.html";
+ if(sessionError)throw sessionError;
+ if(!sessionData.session){
+  window.location.href="login.html";
   return false;
  }
  const {data,error}=await db.rpc("is_tasknova_admin");
- if(error||data!==true){
-  document.body.innerHTML="<h2 style='padding:30px'>Administrator access denied. Please sign in with your administrator account.</h2>";
+ if(error)throw error;
+ if(data!==true){
+  document.body.innerHTML="<h2 style='padding:30px;color:white'>Administrator access denied. Sign in with your administrator account.</h2>";
   return false;
  }
  return true;
 }
 
 async function loadAdminData(){
+ requireDb();
  const {data,error}=await db.rpc("get_tasknova_admin_dashboard");
- if(error){
-  showMessage("Could not load admin data: "+error.message,"error");
-  return;
- }
+ if(error){showMessage("Could not load admin data: "+error.message,"error");return;}
  adminData=normalizeDashboard(data);
  renderOverview();
  renderMembers();
@@ -272,18 +309,13 @@ async function loadAdminData(){
  renderReferrals();
  await loadMemberStatuses();
 }
-
 async function loadMemberStatuses(){
  const {data,error}=await db.from("profiles").select("id,account_status");
- if(error){
-  console.warn("Could not load member account statuses:",error.message);
-  return;
- }
+ if(error){console.warn(error.message);return;}
  memberStatuses={};
  list(data).forEach(p=>memberStatuses[p.id]=p.account_status);
  renderMembers();
 }
-
 function renderOverview(){
  const o=adminData.overview||{};
  const stats=[
@@ -304,7 +336,6 @@ function renderOverview(){
   $("stats").append(box);
  });
 }
-
 function renderMembers(){
  const root=$("memberList");
  root.innerHTML="";
@@ -321,16 +352,13 @@ function renderMembers(){
   item.append(make("p","Balance: $"+safe(m.balance??m.wallet?.balance)));
   item.append(make("p","Status: "+safe(status)));
   const actions=make("div",undefined,"actions");
-  actions.append(actionButton(
-   status==="suspended"?"Reactivate":"Suspend",
+  actions.append(actionButton(status==="suspended"?"Reactivate":"Suspend",
    ()=>changeMemberStatus(m.id,status==="suspended"?"active":"suspended"),
-   status==="suspended"?"green":"danger"
-  ));
+   status==="suspended"?"green":"danger"));
   item.append(actions);
   root.append(item);
  });
 }
-
 function renderSubmissions(){
  const root=$("submissionList");
  root.innerHTML="";
@@ -353,7 +381,6 @@ function renderSubmissions(){
   root.append(item);
  });
 }
-
 function renderWithdrawals(){
  const root=$("withdrawalList");
  root.innerHTML="";
@@ -379,7 +406,6 @@ function renderWithdrawals(){
   root.append(item);
  });
 }
-
 function renderReferrals(){
  const root=$("referralList");
  root.innerHTML="";
@@ -399,6 +425,7 @@ function renderReferrals(){
 }
 
 async function loadTasks(){
+ requireDb();
  const root=$("taskList");
  root.textContent="Loading tasks...";
  const {data,error}=await db.from("tasks").select("*").order("created_at",{ascending:false});
@@ -423,34 +450,31 @@ async function loadTasks(){
 
 $("taskForm").addEventListener("submit",async e=>{
  e.preventDefault();
- const button=$("createBtn");
- button.disabled=true;
- const reward=Number($("taskReward").value);
- const url=$("taskUrl").value.trim();
- if(!Number.isFinite(reward)||reward<=0){
-  showMessage("Reward must be greater than zero.","error");
-  button.disabled=false;return;
- }
- if(url&&!/^https?:\/\//i.test(url)){
-  showMessage("Website URL must start with http:// or https://","error");
-  button.disabled=false;return;
- }
- const {data,error}=await db.rpc("admin_create_task",{
-  p_title:$("taskTitle").value.trim(),
-  p_description:$("taskDescription").value.trim(),
-  p_category:$("taskCategory").value.trim(),
-  p_reward:reward,
-  p_task_url:url||null
- });
- button.disabled=false;
- if(error){showMessage("Create task failed: "+error.message,"error");return;}
- $("taskForm").reset();
- showMessage("Task created successfully.");
- await loadTasks();
- await loadAdminData();
+ try{
+  requireDb();
+  $("createBtn").disabled=true;
+  const reward=Number($("taskReward").value);
+  const url=$("taskUrl").value.trim();
+  if(!Number.isFinite(reward)||reward<=0)throw new Error("Reward must be greater than zero.");
+  if(url&&!/^https?:\/\//i.test(url))throw new Error("Website URL must start with http:// or https://");
+  const {error}=await db.rpc("admin_create_task",{
+   p_title:$("taskTitle").value.trim(),
+   p_description:$("taskDescription").value.trim(),
+   p_category:$("taskCategory").value.trim(),
+   p_reward:reward,
+   p_task_url:url||null
+  });
+  if(error)throw error;
+  $("taskForm").reset();
+  showMessage("Task created successfully.");
+  await loadTasks();
+  await loadAdminData();
+ }catch(error){showMessage("Create task failed: "+error.message,"error");}
+ finally{$("createBtn").disabled=false;}
 });
 
 async function editTask(t){
+ requireDb();
  const title=prompt("Task title:",t.title);
  if(title===null)return;
  const description=prompt("Description:",t.description);
@@ -461,103 +485,102 @@ async function editTask(t){
  if(!Number.isFinite(reward)||reward<=0){showMessage("Invalid reward.","error");return;}
  const url=prompt("Website URL:",t.task_url||"");
  if(url===null)return;
- if(url.trim()&&!/^https?:\/\//i.test(url.trim())){
-  showMessage("Website URL must start with http:// or https://","error");return;
- }
+ if(url.trim()&&!/^https?:\/\//i.test(url.trim())){showMessage("Website URL must start with http:// or https://","error");return;}
  const {error}=await db.rpc("admin_update_task",{
   p_task_id:t.id,p_title:title.trim(),p_description:description.trim(),
   p_category:category.trim(),p_reward:reward,p_task_url:url.trim()||null
  });
- if(error){showMessage("Update failed: "+error.message,"error");return;}
+ if(error)throw error;
  showMessage("Task updated.");
  await loadTasks();await loadAdminData();
 }
-
 async function changeTaskStatus(t){
+ requireDb();
  const status=t.status==="active"?"inactive":"active";
  const {error}=await db.rpc("admin_set_task_status",{p_task_id:t.id,p_status:status});
- if(error){showMessage("Status update failed: "+error.message,"error");return;}
+ if(error)throw error;
  showMessage("Task status updated.");
  await loadTasks();await loadAdminData();
 }
 async function deleteTask(t){
+ requireDb();
  if(!confirm("Delete this task? Tasks with submissions may not be deletable."))return;
  const {error}=await db.rpc("admin_delete_task",{p_task_id:t.id});
- if(error){showMessage("Delete failed: "+error.message,"error");return;}
+ if(error)throw error;
  showMessage("Task deleted.");
  await loadTasks();await loadAdminData();
 }
 async function changeMemberStatus(id,status){
+ requireDb();
  if(!confirm("Change this member's status to "+status+"?"))return;
  const {error}=await db.rpc("admin_set_member_status",{p_user_id:id,p_status:status});
- if(error){showMessage("Member update failed: "+error.message,"error");return;}
+ if(error)throw error;
  memberStatuses[id]=status;
  showMessage("Member status updated.");
  await loadAdminData();
 }
 async function reviewSubmission(id,decision){
+ requireDb();
  if(!confirm("Are you sure you want to "+decision+" this submission?"))return;
- const {error}=await db.rpc("admin_review_submission",{
-  p_submission_id:id,p_decision:decision
- });
- if(error){showMessage("Submission review failed: "+error.message,"error");return;}
+ const {error}=await db.rpc("admin_review_submission",{p_submission_id:id,p_decision:decision});
+ if(error)throw error;
  showMessage("Submission "+decision+".");
  await loadAdminData();
 }
 async function reviewWithdrawal(id,decision){
+ requireDb();
  if(!confirm("Are you sure you want to "+decision+" this withdrawal?"))return;
- const {error}=await db.rpc("admin_review_withdrawal",{
-  p_withdrawal_id:id,p_decision:decision
- });
- if(error){showMessage("Withdrawal review failed: "+error.message,"error");return;}
+ const {error}=await db.rpc("admin_review_withdrawal",{p_withdrawal_id:id,p_decision:decision});
+ if(error)throw error;
  showMessage("Withdrawal "+decision+".");
  await loadAdminData();
 }
 async function markPaid(id){
+ requireDb();
  if(!confirm("Confirm that you have manually paid this withdrawal?"))return;
  const {error}=await db.rpc("admin_mark_withdrawal_paid",{p_withdrawal_id:id});
- if(error){showMessage("Mark paid failed: "+error.message,"error");return;}
+ if(error)throw error;
  showMessage("Withdrawal marked as paid.");
  await loadAdminData();
 }
-
 async function payReferral(id){
+ requireDb();
  if(!confirm("Pay this qualified referral bonus?"))return;
  const {error}=await db.rpc("admin_pay_qualified_referral",{p_referral_id:id});
- if(error){showMessage("Referral payment failed: "+error.message,"error");return;}
+ if(error)throw error;
  showMessage("Referral bonus paid.");
  await loadAdminData();
 }
 
 async function loadReferralSettings(){
+ requireDb();
  const {data,error}=await db.rpc("get_tasknova_admin_dashboard");
- if(error){showMessage("Could not load referral settings: "+error.message,"error");return;}
- const d=normalizeDashboard(data);
- const settings=d.referral_settings||{};
+ if(error)throw error;
+ const settings=normalizeDashboard(data).referral_settings||{};
  $("refEnabled").value=String(!!settings.enabled);
  $("refBonus").value=settings.bonus_amount??0;
 }
-
 $("saveReferralBtn").addEventListener("click",async()=>{
- const bonus=Number($("refBonus").value);
- if(!Number.isFinite(bonus)||bonus<0){
-  showMessage("Enter a valid referral bonus amount.","error");return;
- }
- const button=$("saveReferralBtn");
- button.disabled=true;
- const {error}=await db.rpc("admin_set_referral_settings",{
-  p_enabled:$("refEnabled").value==="true",
-  p_bonus_amount:bonus
- });
- button.disabled=false;
- if(error){showMessage("Saving referral settings failed: "+error.message,"error");return;}
- showMessage("Referral settings saved.");
- await loadAdminData();
+ try{
+  requireDb();
+  const bonus=Number($("refBonus").value);
+  if(!Number.isFinite(bonus)||bonus<0)throw new Error("Enter a valid referral bonus amount.");
+  $("saveReferralBtn").disabled=true;
+  const {error}=await db.rpc("admin_set_referral_settings",{
+   p_enabled:$("refEnabled").value==="true",
+   p_bonus_amount:bonus
+  });
+  if(error)throw error;
+  showMessage("Referral settings saved.");
+  await loadAdminData();
+ }catch(error){showMessage("Saving referral settings failed: "+error.message,"error");}
+ finally{$("saveReferralBtn").disabled=false;}
 });
 
 async function loadSettings(){
+ requireDb();
  const {data,error}=await db.rpc("get_tasknova_platform_settings");
- if(error){showMessage("Could not load platform settings: "+error.message,"error");return;}
+ if(error)throw error;
  const settings=Array.isArray(data)?data[0]:data;
  if(!settings)return;
  $("platformName").value=settings.platform_name||"TaskNova";
@@ -565,27 +588,28 @@ async function loadSettings(){
  $("maintenanceMode").value=String(!!settings.maintenance_mode);
  $("registrationsEnabled").value=String(settings.registrations_enabled!==false);
 }
-
 $("settingsForm").addEventListener("submit",async e=>{
  e.preventDefault();
- const minimum=Number($("minimumWithdrawal").value);
- if(!Number.isFinite(minimum)||minimum<5){
-  showMessage("Minimum withdrawal cannot be less than $5.","error");return;
- }
- const button=$("settingsForm").querySelector('button[type="submit"]');
- button.disabled=true;
- const {error}=await db.rpc("admin_update_platform_settings",{
-  p_platform_name:$("platformName").value.trim(),
-  p_minimum_withdrawal:minimum,
-  p_maintenance_mode:$("maintenanceMode").value==="true",
-  p_registrations_enabled:$("registrationsEnabled").value==="true"
- });
- button.disabled=false;
- if(error){showMessage("Saving platform settings failed: "+error.message,"error");return;}
- showMessage("Platform settings saved.");
+ try{
+  requireDb();
+  const minimum=Number($("minimumWithdrawal").value);
+  if(!Number.isFinite(minimum)||minimum<5)throw new Error("Minimum withdrawal cannot be less than $5.");
+  const button=$("settingsForm").querySelector('button[type="submit"]');
+  button.disabled=true;
+  const {error}=await db.rpc("admin_update_platform_settings",{
+   p_platform_name:$("platformName").value.trim(),
+   p_minimum_withdrawal:minimum,
+   p_maintenance_mode:$("maintenanceMode").value==="true",
+   p_registrations_enabled:$("registrationsEnabled").value==="true"
+  });
+  if(error)throw error;
+  showMessage("Platform settings saved.");
+ }catch(error){showMessage("Saving platform settings failed: "+error.message,"error");}
+ finally{$("settingsForm").querySelector('button[type="submit"]').disabled=false;}
 });
 
 async function loadLogs(){
+ requireDb();
  const root=$("logList");
  root.textContent="Loading audit logs...";
  const {data,error}=await db.rpc("get_tasknova_audit_logs");
@@ -603,20 +627,26 @@ async function loadLogs(){
  });
 }
 
-$("logoutBtn").addEventListener("click",async()=>{
- await db.auth.signOut();
- location.href="login.html";
-});
-
+/* Start Supabase-dependent functions after navigation is ready. */
 (async function init(){
- const allowed=await checkAdmin();
- if(!allowed)return;
- await Promise.all([
-  loadAdminData(),
-  loadTasks(),
-  loadSettings(),
-  loadReferralSettings()
- ]);
+ try{
+  if(!window.supabase||typeof window.supabase.createClient!=="function"){
+   showMessage("Supabase did not load. Check your internet connection. Navigation remains available.","error");
+   return;
+  }
+  db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+  window.db=db;
+  const allowed=await checkAdmin();
+  if(!allowed)return;
+  await Promise.all([
+   loadAdminData(),
+   loadTasks(),
+   loadSettings(),
+   loadReferralSettings()
+  ]);
+ }catch(error){
+  showMessage("Dashboard startup error: "+(error.message||String(error)),"error");
+ }
 })();
 </script>
 </body>
