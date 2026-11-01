@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TaskNova | Member Dashboard</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -15,18 +16,21 @@
   --purple2:#7042d8;
   --text:#f5f5ff;
   --muted:#a6acc4;
-  --green:#22c55e;
-  --red:#ef4444;
   --border:#303750;
 }
-*{box-sizing:border-box}
-body{
+
+* {
+  box-sizing:border-box;
+}
+
+body {
   margin:0;
   background:var(--bg);
   color:var(--text);
   font-family:Arial,sans-serif;
 }
-header{
+
+header {
   padding:17px 22px;
   background:#171b2d;
   border-bottom:1px solid var(--border);
@@ -37,9 +41,18 @@ header{
   top:0;
   z-index:10;
 }
-.logo{font-size:23px;font-weight:bold;color:#b69aff}
-.logo span{color:white}
-.logout{
+
+.logo {
+  font-size:23px;
+  font-weight:bold;
+  color:#b69aff;
+}
+
+.logo span {
+  color:white;
+}
+
+.logout {
   border:0;
   background:#38234e;
   color:white;
@@ -47,15 +60,21 @@ header{
   border-radius:8px;
   cursor:pointer;
 }
-.layout{display:flex;min-height:calc(100vh - 65px)}
-.sidebar{
+
+.layout {
+  display:flex;
+  min-height:calc(100vh - 65px);
+}
+
+.sidebar {
   width:225px;
   padding:20px 12px;
   background:#151a2c;
   border-right:1px solid var(--border);
   flex-shrink:0;
 }
-.nav{
+
+.nav {
   display:block;
   width:100%;
   text-align:left;
@@ -68,29 +87,74 @@ header{
   cursor:pointer;
   font-size:14px;
 }
-.nav:hover,.nav.active{background:#30234e;color:white}
-.nav .icon{display:inline-block;width:27px}
-main{flex:1;padding:25px;min-width:0}
-.section{display:none}
-.section.active{display:block}
-h1{font-size:25px;margin:0 0 8px}
-.subtitle{color:var(--muted);margin-bottom:22px}
-.cards{
+
+.nav:hover,
+.nav.active {
+  background:#30234e;
+  color:white;
+}
+
+.nav .icon {
+  display:inline-block;
+  width:27px;
+}
+
+main {
+  flex:1;
+  padding:25px;
+  min-width:0;
+}
+
+.section {
+  display:none;
+}
+
+.section.active {
+  display:block;
+}
+
+h1 {
+  font-size:25px;
+  margin:0 0 8px;
+}
+
+.subtitle {
+  color:var(--muted);
+  margin-bottom:22px;
+}
+
+.cards {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
   gap:15px;
   margin-bottom:25px;
 }
-.card{
+
+.card {
   background:var(--panel);
   padding:19px;
   border:1px solid var(--border);
   border-radius:13px;
 }
-.card .label{color:var(--muted);font-size:13px}
-.card .value{font-size:25px;font-weight:bold;margin-top:12px}
-.card .small{font-size:12px;color:var(--muted);margin-top:7px}
-.panel{
+
+.card .label {
+  color:var(--muted);
+  font-size:13px;
+}
+
+.card .value {
+  font-size:25px;
+  font-weight:bold;
+  margin-top:12px;
+}
+
+.card .small {
+  font-size:12px;
+  color:var(--muted);
+  margin-top:7px;
+}
+
+.panel {
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:13px;
@@ -98,22 +162,43 @@ h1{font-size:25px;margin:0 0 8px}
   margin-bottom:18px;
   overflow-x:auto;
 }
-.panel h2{font-size:18px;margin:0 0 16px}
-.task-grid{
+
+.panel h2 {
+  font-size:18px;
+  margin:0 0 16px;
+}
+
+.task-grid {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
   gap:15px;
 }
-.task{
+
+.task {
   background:var(--panel2);
   border:1px solid var(--border);
   border-radius:12px;
   padding:17px;
 }
-.task h3{margin:0 0 9px;font-size:17px}
-.task p{color:var(--muted);font-size:13px;line-height:1.5}
-.reward{color:#c4a8ff;font-weight:bold;font-size:18px}
-button.primary{
+
+.task h3 {
+  margin:0 0 9px;
+  font-size:17px;
+}
+
+.task p {
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.reward {
+  color:#c4a8ff;
+  font-weight:bold;
+  font-size:18px;
+}
+
+button.primary {
   background:var(--purple);
   color:white;
   border:0;
@@ -122,8 +207,12 @@ button.primary{
   cursor:pointer;
   font-weight:bold;
 }
-button.primary:hover{background:var(--purple2)}
-button.secondary{
+
+button.primary:hover {
+  background:var(--purple2);
+}
+
+button.secondary {
   background:#303750;
   color:white;
   border:0;
@@ -131,8 +220,15 @@ button.secondary{
   padding:9px 12px;
   cursor:pointer;
 }
-button:disabled{opacity:.5;cursor:not-allowed}
-input,select,textarea{
+
+button:disabled {
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+input,
+select,
+textarea {
   width:100%;
   padding:12px;
   margin:7px 0 14px;
@@ -142,32 +238,89 @@ input,select,textarea{
   border-radius:8px;
   font:inherit;
 }
-label{font-size:13px;color:var(--muted)}
-.form-box{max-width:520px}
-table{width:100%;border-collapse:collapse;min-width:520px}
-th,td{
+
+label {
+  font-size:13px;
+  color:var(--muted);
+}
+
+.form-box {
+  max-width:520px;
+}
+
+table {
+  width:100%;
+  border-collapse:collapse;
+  min-width:520px;
+}
+
+th,
+td {
   text-align:left;
   padding:12px 10px;
   border-bottom:1px solid var(--border);
   font-size:13px;
 }
-th{color:#c5b1ff}
-td{color:#e4e6f1}
-.badge{
+
+th {
+  color:#c5b1ff;
+}
+
+td {
+  color:#e4e6f1;
+}
+
+.badge {
   display:inline-block;
   padding:5px 9px;
   border-radius:20px;
   font-size:11px;
   background:#303750;
 }
-.badge.approved,.badge.paid,.badge.rewarded{background:#123d2b;color:#75e5a6}
-.badge.pending,.badge.qualified{background:#493a19;color:#f4d27c}
-.badge.rejected{background:#4b2028;color:#ff9ba5}
-.message{padding:12px;border-radius:8px;margin:12px 0;display:none}
-.message.error{display:block;background:#48222b;color:#ffb3bc}
-.message.success{display:block;background:#163b2c;color:#a3f0bd}
-.empty{color:var(--muted);padding:15px 0}
-.refcode{
+
+.badge.approved,
+.badge.paid,
+.badge.rewarded {
+  background:#123d2b;
+  color:#75e5a6;
+}
+
+.badge.pending,
+.badge.qualified {
+  background:#493a19;
+  color:#f4d27c;
+}
+
+.badge.rejected {
+  background:#4b2028;
+  color:#ff9ba5;
+}
+
+.empty {
+  color:var(--muted);
+  padding:15px 0;
+}
+
+.message {
+  padding:12px;
+  border-radius:8px;
+  margin:12px 0;
+  display:none;
+}
+
+.message.error {
+  display:block;
+  background:#48222b;
+  color:#ffb3bc;
+}
+
+.message.success {
+  display:block;
+  background:#163b2c;
+  color:#a3f0bd;
+}
+
+.refcode {
   background:#11172a;
   border:1px dashed #8b5cf6;
   padding:14px;
@@ -176,10 +329,17 @@ td{color:#e4e6f1}
   letter-spacing:2px;
   overflow-wrap:anywhere;
 }
-a{color:#c4a8ff}
-@media(max-width:750px){
-  .layout{display:block}
-  .sidebar{
+
+a {
+  color:#c4a8ff;
+}
+
+@media(max-width:750px) {
+  .layout {
+    display:block;
+  }
+
+  .sidebar {
     width:100%;
     display:flex;
     overflow-x:auto;
@@ -187,10 +347,25 @@ a{color:#c4a8ff}
     border-right:0;
     border-bottom:1px solid var(--border);
   }
-  .nav{white-space:nowrap;width:auto;flex-shrink:0;margin:0 3px}
-  main{padding:16px}
-  header{padding:14px}
-  h1{font-size:22px}
+
+  .nav {
+    white-space:nowrap;
+    width:auto;
+    flex-shrink:0;
+    margin:0 3px;
+  }
+
+  main {
+    padding:16px;
+  }
+
+  header {
+    padding:14px;
+  }
+
+  h1 {
+    font-size:22px;
+  }
 }
 </style>
 </head>
@@ -205,183 +380,295 @@ a{color:#c4a8ff}
 <div class="layout">
 
 <aside class="sidebar">
-  <button class="nav active" data-tab="overview"><span class="icon">🏠</span>Overview</button>
-  <button class="nav" data-tab="tasks"><span class="icon">📋</span>Available Tasks</button>
-  <button class="nav" data-tab="submissions"><span class="icon">📤</span>My Submissions</button>
-  <button class="nav" data-tab="wallet"><span class="icon">👛</span>My Wallet</button>
-  <button class="nav" data-tab="withdraw"><span class="icon">💸</span>Withdraw</button>
-  <button class="nav" data-tab="referrals"><span class="icon">👥</span>Referrals</button>
-  <button class="nav" data-tab="transactions"><span class="icon">📊</span>Transactions</button>
+
+  <button type="button" class="nav active" data-tab="overview">
+    <span class="icon">🏠</span>Overview
+  </button>
+
+  <button type="button" class="nav" data-tab="tasks">
+    <span class="icon">📋</span>Available Tasks
+  </button>
+
+  <button type="button" class="nav" data-tab="submissions">
+    <span class="icon">📤</span>My Submissions
+  </button>
+
+  <button type="button" class="nav" data-tab="wallet">
+    <span class="icon">👛</span>My Wallet
+  </button>
+
+  <button type="button" class="nav" data-tab="withdraw">
+    <span class="icon">💸</span>Withdraw
+  </button>
+
+  <button type="button" class="nav" data-tab="referrals">
+    <span class="icon">👥</span>Referrals
+  </button>
+
+  <button type="button" class="nav" data-tab="transactions">
+    <span class="icon">📊</span>Transactions
+  </button>
+
 </aside>
 
 <main>
 
 <div id="notice" class="message"></div>
 
+<!-- OVERVIEW -->
+
 <section class="section active" id="overview">
+
   <h1 id="welcome">Welcome to TaskNova</h1>
-  <div class="subtitle">Your member dashboard.</div>
+
+  <div class="subtitle">
+    Your member dashboard.
+  </div>
 
   <div class="cards">
+
     <div class="card">
       <div class="label">Available Balance</div>
       <div class="value" id="balance">$0.00</div>
       <div class="small">Available for withdrawal</div>
     </div>
+
     <div class="card">
       <div class="label">Total Earned</div>
       <div class="value" id="totalEarned">$0.00</div>
       <div class="small">Your approved earnings</div>
     </div>
+
     <div class="card">
       <div class="label">Available Tasks</div>
       <div class="value" id="taskCount">0</div>
       <div class="small">Tasks you can complete</div>
     </div>
+
     <div class="card">
       <div class="label">Pending Submissions</div>
       <div class="value" id="pendingCount">0</div>
       <div class="small">Awaiting admin review</div>
     </div>
+
   </div>
 
   <div class="panel">
+
     <h2>👋 Your Account</h2>
+
     <p id="memberName">Loading your account...</p>
+
     <p id="memberEmail" class="subtitle"></p>
+
     <p id="memberCountry"></p>
+
   </div>
 
   <div class="panel">
+
     <h2>🚀 Getting Started</h2>
-    <p>Choose an available task, complete it, and submit your proof.</p>
-    <p>When an administrator approves your submission, your reward will be credited to your wallet.</p>
-    <button class="primary" data-goto="tasks">Explore Tasks</button>
+
+    <p>
+      Choose an available task, complete it, and submit your proof.
+    </p>
+
+    <p>
+      When an administrator approves your submission,
+      your reward will be credited to your wallet.
+    </p>
+
+    <button type="button" class="primary" data-goto="tasks">
+      Explore Tasks
+    </button>
+
   </div>
+
 </section>
 
+<!-- AVAILABLE TASKS -->
+
 <section class="section" id="tasks">
+
   <h1>📋 Available Tasks</h1>
-  <div class="subtitle">Complete tasks and submit proof to earn rewards.</div>
+
+  <div class="subtitle">
+    Complete tasks and submit proof to earn rewards.
+  </div>
+
   <div id="tasksList" class="task-grid">
     <p class="empty">Loading tasks...</p>
   </div>
+
 </section>
 
+<!-- SUBMISSIONS -->
+
 <section class="section" id="submissions">
+
   <h1>📤 My Submissions</h1>
-  <div class="subtitle">Track the status of your submitted tasks.</div>
+
+  <div class="subtitle">
+    Track the status of your submitted tasks.
+  </div>
+
   <div class="panel">
     <div id="submissionsList"></div>
   </div>
+
 </section>
 
+<!-- WALLET -->
+
 <section class="section" id="wallet">
+
   <h1>👛 My Wallet</h1>
-  <div class="subtitle">Your TaskNova earnings.</div>
+
+  <div class="subtitle">
+    Your TaskNova earnings.
+  </div>
+
   <div class="cards">
+
     <div class="card">
       <div class="label">Available Balance</div>
       <div class="value" id="walletBalance">$0.00</div>
     </div>
+
     <div class="card">
       <div class="label">Total Earned</div>
       <div class="value" id="walletEarned">$0.00</div>
     </div>
+
   </div>
+
   <div class="panel">
+
     <h2>How your wallet works</h2>
-    <p>Rewards are added after an administrator approves your task submission.</p>
-    <p>Withdrawal requests reserve the requested amount. If a request is rejected, the amount is returned to your wallet.</p>
-    <button class="primary" data-goto="withdraw">Request Withdrawal</button>
+
+    <p>
+      Rewards are added after an administrator approves
+      your task submission.
+    </p>
+
+    <p>
+      Withdrawal requests reserve the requested amount.
+      If a request is rejected, the amount is returned to your wallet.
+    </p>
+
+    <button type="button" class="primary" data-goto="withdraw">
+      Request Withdrawal
+    </button>
+
   </div>
+
 </section>
 
 <section class="section" id="withdraw">
-  <h1>💸 Request Withdrawal</h1>
-  <div class="subtitle">Request a payout from your available balance.</div>
+  <div class="section-heading">
+    <h2>Withdraw Funds</h2>
+    <p>Request a payout from your available balance.</p>
+  </div>
 
-  <div class="panel form-box">
-    <h2>Withdrawal Details</h2>
+  <div class="card">
+    <p>Available balance</p>
+    <h2 id="withdrawBalance">$0.00</h2>
     <p>Minimum withdrawal: <strong id="minimumWithdrawal">$5.00</strong></p>
-    <p>Available balance: <strong id="withdrawBalance">$0.00</strong></p>
 
     <form id="withdrawForm">
-      <label>Amount</label>
-      <input type="number" id="withdrawAmount" min="5" step="0.01" placeholder="Enter amount" required>
+      <label for="withdrawAmount">Amount (USD)</label>
+      <input
+        type="number"
+        id="withdrawAmount"
+        min="5"
+        step="0.01"
+        placeholder="Enter amount"
+        required
+      >
 
-      <label>Payment Method</label>
+      <label for="paymentMethod">Payment method</label>
       <select id="paymentMethod" required>
-        <option value="">Choose payment method</option>
+        <option value="">Select payment method</option>
         <option value="Bank Transfer">Bank Transfer</option>
         <option value="PayPal">PayPal</option>
-        <option value="Mobile Money">Mobile Money</option>
+        <option value="Payoneer">Payoneer</option>
         <option value="Crypto">Cryptocurrency</option>
         <option value="Other">Other</option>
       </select>
 
-      <label>Payment Details</label>
-      <textarea id="paymentDetails" rows="4" minlength="3" maxlength="2000" placeholder="Enter your payment details carefully" required></textarea>
+      <label for="paymentDetails">Payment details</label>
+      <textarea
+        id="paymentDetails"
+        rows="4"
+        placeholder="Enter your account or wallet details"
+        required
+      ></textarea>
 
-      <button class="primary" id="withdrawButton" type="submit">Submit Withdrawal Request</button>
+      <button type="submit" id="withdrawButton">Submit Withdrawal Request</button>
     </form>
-    <p class="subtitle">Withdrawals are reviewed and paid manually by the TaskNova administrator.</p>
   </div>
 
-  <div class="panel">
-    <h2>Withdrawal History</h2>
-    <div id="withdrawalsList"></div>
+  <div class="card">
+    <h3>Withdrawal History</h3>
+    <div id="withdrawalsList">Loading withdrawals...</div>
   </div>
 </section>
 
 <section class="section" id="referrals">
-  <h1>👥 Referral Program</h1>
-  <div class="subtitle">Invite people to join TaskNova using your referral code.</div>
-
-  <div class="panel">
-    <h2>Your Invitation Code</h2>
-    <div class="refcode" id="inviteCode">Loading...</div>
-    <br>
-    <button class="primary" id="copyCodeButton">Copy Invitation Code</button>
+  <div class="section-heading">
+    <h2>Referral Programme</h2>
+    <p>Invite people to join TaskNova using your referral code.</p>
   </div>
 
-  <div class="cards">
+  <div class="card">
+    <h3>Your Referral Code</h3>
+    <div class="referral-code">
+      <strong id="inviteCode">Loading...</strong>
+      <button type="button" id="copyCodeButton">Copy Code</button>
+    </div>
+    <p>Share your code with people you invite.</p>
+  </div>
+
+  <div class="stats-grid">
     <div class="card">
-      <div class="label">Total Referrals</div>
-      <div class="value" id="refTotal">0</div>
+      <p>Total Referrals</p>
+      <h2 id="refTotal">0</h2>
     </div>
     <div class="card">
-      <div class="label">Pending</div>
-      <div class="value" id="refPending">0</div>
+      <p>Pending</p>
+      <h2 id="refPending">0</h2>
     </div>
     <div class="card">
-      <div class="label">Qualified</div>
-      <div class="value" id="refQualified">0</div>
+      <p>Qualified</p>
+      <h2 id="refQualified">0</h2>
     </div>
     <div class="card">
-      <div class="label">Rewarded</div>
-      <div class="value" id="refRewarded">0</div>
+      <p>Rewarded</p>
+      <h2 id="refRewarded">0</h2>
     </div>
   </div>
 
-  <div class="panel">
-    <h2>How Referrals Work</h2>
-    <p>Share your invitation code with someone who wants to join TaskNova.</p>
-    <p>Referral rewards depend on the platform's current referral settings and qualification requirements.</p>
-    <p>Referral bonuses are not guaranteed unless the administrator has enabled the program and the referral qualifies.</p>
+  <div class="card">
+    <h3>How referrals work</h3>
+    <p>Share your referral code. When someone registers with your code, their referral can be tracked. Referral rewards are subject to the platform's referral rules and approval.</p>
   </div>
 </section>
 
 <section class="section" id="transactions">
-  <h1>📊 Transaction History</h1>
-  <div class="subtitle">Review wallet credits, withdrawals and other transactions.</div>
-  <div class="panel">
-    <div id="transactionsList"></div>
+  <div class="section-heading">
+    <h2>Transactions</h2>
+    <p>View your wallet activity.</p>
+  </div>
+
+  <div class="card">
+    <div id="transactionsList">Loading transactions...</div>
   </div>
 </section>
 
 </main>
 </div>
+
+<div id="notification" class="notification" role="status"></div>
 
 <script>
 const SUPABASE_URL = "https://nplaagzwpthofvounzma.supabase.co";
@@ -392,154 +679,190 @@ const supabase = window.supabase.createClient(
   SUPABASE_KEY
 );
 
+let currentUser = null;
 let memberData = null;
 let platformSettings = {
-  platform_name: "TaskNova",
   currency_code: "USD",
-  minimum_withdrawal: 5,
-  maintenance_mode: false,
-  registrations_enabled: true
+  minimum_withdrawal: 5
 };
-
 let referralAttempted = false;
 
 function safe(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#039;"
-  })[char]);
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[character]);
 }
 
 function money(value) {
   const amount = Number(value || 0);
+  const currency = platformSettings.currency_code || "USD";
+
   try {
     return new Intl.NumberFormat(undefined, {
-      style:"currency",
-      currency:platformSettings.currency_code || "USD"
+      style: "currency",
+      currency: currency
     }).format(amount);
   } catch {
-    return "$" + amount.toFixed(2);
+    return currency + " " + amount.toFixed(2);
   }
 }
 
-function notify(message, type="success") {
-  const box = document.getElementById("notice");
+function notify(message, isError = false) {
+  const box = document.getElementById("notification");
+
+  if (!box) {
+    alert(message);
+    return;
+  }
+
   box.textContent = message;
-  box.className = "message " + type;
-  window.scrollTo({top:0,behavior:"smooth"});
+  box.classList.toggle("error", isError);
+  box.classList.add("show");
 
-  setTimeout(() => {
-    box.className = "message";
-  }, 6000);
+  clearTimeout(window.notificationTimer);
+
+  window.notificationTimer = setTimeout(() => {
+    box.classList.remove("show");
+  }, 3500);
 }
 
+/* Dashboard navigation */
 function showTab(tabName) {
-const allowedTabs = [
-"overview",
-"tasks",
-"submissions",
-"wallet",
-"withdraw",
-"referrals",
-"transactions"
-];
+  const target = document.getElementById(tabName);
 
-if (!allowedTabs.includes(tabName)) return;
+  if (!target || !target.classList.contains("section")) {
+    return;
+  }
 
-document.querySelectorAll("main .section").forEach(section => {
-section.classList.toggle("active", section.id === tabName);
-});
+  document.querySelectorAll(".section").forEach(section => {
+    section.classList.remove("active");
+  });
 
-document.querySelectorAll(".sidebar .nav").forEach(button => {
-button.classList.toggle("active", button.dataset.tab === tabName);
-});
+  document.querySelectorAll(".nav[data-tab]").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.tab === tabName
+    );
+  });
 
-window.scrollTo({ top: 0, behavior: "smooth" });
+  target.classList.add("active");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
 
-document.addEventListener("click", function(event) {
-const navButton = event.target.closest(".sidebar .nav[data-tab]");
-const gotoButton = event.target.closest("[data-goto]");
+/* One navigation handler for sidebar buttons and dashboard shortcuts */
+document.addEventListener("click", event => {
+  const button = event.target.closest(".nav[data-tab], [data-goto]");
 
-if (navButton) {
-event.preventDefault();
-showTab(navButton.dataset.tab);
-return;
-}
+  if (!button) return;
 
-if (gotoButton) {
-event.preventDefault();
-showTab(gotoButton.dataset.goto);
-}
+  const tabName = button.dataset.tab || button.dataset.goto;
+
+  if (tabName) {
+    event.preventDefault();
+    showTab(tabName);
+  }
 });
+
+function formatDate(value) {
+  if (!value) return "—";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "—";
+  }
+
+  return date.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  });
+}
+
+function badge(status) {
+  const value = String(status || "pending").toLowerCase();
+
+  return `<span class="status-badge ${safe(value)}">${safe(value)}</span>`;
+}
 
 async function loadSettings() {
-  const {data,error} = await supabase.rpc("get_tasknova_platform_settings");
+  const { data, error } = await supabase.rpc(
+    "get_tasknova_platform_settings"
+  );
 
   if (error) {
-    console.error("Settings error:", error.message);
+    console.warn("Platform settings:", error.message);
     return;
   }
 
   let settings = data;
 
   if (Array.isArray(settings)) {
-    settings = settings[0];
-  }
-
-  if (typeof settings === "string") {
-    try { settings = JSON.parse(settings); } catch {}
+    settings = settings[0] || {};
   }
 
   if (settings && typeof settings === "object") {
-    platformSettings = {...platformSettings,...settings};
+    platformSettings = {
+      ...platformSettings,
+      ...settings
+    };
   }
 
-  document.getElementById("minimumWithdrawal").textContent =
-    money(platformSettings.minimum_withdrawal);
+  const minimum = Number(
+    platformSettings.minimum_withdrawal || 5
+  );
 
-  document.getElementById("withdrawAmount").min =
-    Number(platformSettings.minimum_withdrawal || 5);
+  const minimumText = money(minimum);
+
+  const minimumElement = document.getElementById("minimumWithdrawal");
+
+  if (minimumElement) {
+    minimumElement.textContent = minimumText;
+  }
+
+  const amountInput = document.getElementById("withdrawAmount");
+
+  if (amountInput) {
+    amountInput.min = String(minimum);
+  }
 }
 
 async function checkLogin() {
-  const {data,error} = await supabase.auth.getUser();
+  const { data, error } = await supabase.auth.getUser();
 
   if (error || !data.user) {
     window.location.href = "login.html";
-    return null;
+    return false;
   }
 
-  return data.user;
+  currentUser = data.user;
+  return true;
 }
 
 async function loadDashboard() {
-  const user = await checkLogin();
-  if (!user) return;
-
-  const {data,error} = await supabase.rpc("get_tasknova_member_dashboard");
+  const { data, error } = await supabase.rpc(
+    "get_tasknova_member_dashboard"
+  );
 
   if (error) {
-    console.error("Dashboard error:",error.message);
-
-    document.querySelector("main").innerHTML = `
-      <div class="panel">
-        <h1>Unable to load your dashboard</h1>
-        <p>${safe(error.message)}</p>
-        <p>Your account may be suspended or the platform may be under maintenance.</p>
-        <button class="primary" id="tryAgain">Try Again</button>
-        <button class="secondary" id="errorLogout">Logout</button>
-      </div>`;
-
-    document.getElementById("tryAgain").addEventListener("click",() => location.reload());
-    document.getElementById("errorLogout").addEventListener("click",logout);
+    console.error("Dashboard loading error:", error);
+    notify("Could not load your dashboard. Please refresh.", true);
     return;
   }
 
   memberData = data || {};
+
+  if (Array.isArray(memberData)) {
+    memberData = memberData[0] || {};
+  }
 
   renderDashboard();
 
@@ -550,47 +873,63 @@ async function loadDashboard() {
 }
 
 function renderDashboard() {
+  if (!memberData) return;
+
   const profile = memberData.profile || {};
   const wallet = memberData.wallet || {};
-  const tasks = memberData.tasks || [];
-  const submissions = memberData.submissions || [];
-  const transactions = memberData.transactions || [];
-  const withdrawals = memberData.withdrawals || [];
   const referrals = memberData.referrals || {};
 
   const name = profile.full_name || profile.username || "Member";
+
+  const nameElements = document.querySelectorAll("[data-member-name]");
+
+  nameElements.forEach(element => {
+    element.textContent = name;
+  });
+
   const balance = Number(wallet.balance || 0);
   const earned = Number(wallet.total_earned || 0);
 
-  document.getElementById("welcome").textContent = "Welcome, " + name + "!";
-  document.getElementById("memberName").textContent = name;
-  document.getElementById("memberEmail").textContent = profile.email || "";
-  document.getElementById("memberCountry").textContent =
-    profile.country ? "Country: " + profile.country : "";
+  const balanceElements = document.querySelectorAll("[data-wallet-balance]");
 
-  document.getElementById("balance").textContent = money(balance);
-  document.getElementById("totalEarned").textContent = money(earned);
-  document.getElementById("taskCount").textContent = tasks.length;
+  balanceElements.forEach(element => {
+    element.textContent = money(balance);
+  });
 
-  const pending = submissions.filter(s => s.status === "pending").length;
-  document.getElementById("pendingCount").textContent = pending;
+  const earnedElements = document.querySelectorAll("[data-total-earned]");
 
-  document.getElementById("walletBalance").textContent = money(balance);
-  document.getElementById("walletEarned").textContent = money(earned);
-  document.getElementById("withdrawBalance").textContent = money(balance);
+  earnedElements.forEach(element => {
+    element.textContent = money(earned);
+  });
 
-  document.getElementById("inviteCode").textContent =
-    profile.invite_code || "Not available";
+  const withdrawBalance = document.getElementById("withdrawBalance");
 
-  document.getElementById("refTotal").textContent = referrals.total || 0;
-  document.getElementById("refPending").textContent = referrals.pending || 0;
-  document.getElementById("refQualified").textContent = referrals.qualified || 0;
-  document.getElementById("refRewarded").textContent = referrals.rewarded || 0;
+  if (withdrawBalance) {
+    withdrawBalance.textContent = money(balance);
+  }
 
-  renderTasks(tasks);
-  renderSubmissions(submissions);
-  renderWithdrawals(withdrawals);
-  renderTransactions(transactions);
+  const inviteCode = document.getElementById("inviteCode");
+
+  if (inviteCode) {
+    inviteCode.textContent = profile.invite_code || "Not available";
+  }
+
+  document.getElementById("refTotal").textContent =
+    Number(referrals.total || 0);
+
+  document.getElementById("refPending").textContent =
+    Number(referrals.pending || 0);
+
+  document.getElementById("refQualified").textContent =
+    Number(referrals.qualified || 0);
+
+  document.getElementById("refRewarded").textContent =
+    Number(referrals.rewarded || 0);
+
+  renderTasks(memberData.tasks || []);
+  renderSubmissions(memberData.submissions || []);
+  renderWithdrawals(memberData.withdrawals || []);
+  renderTransactions(memberData.transactions || []);
 }
 
 function taskLink(url) {
@@ -598,8 +937,12 @@ function taskLink(url) {
 
   try {
     const parsed = new URL(url);
-    if (!["http:","https:"].includes(parsed.protocol)) return "";
-    return `<p><a href="${safe(parsed.href)}" target="_blank" rel="noopener noreferrer">Open Task Website ↗</a></p>`;
+
+    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+      return "";
+    }
+
+    return parsed.href;
   } catch {
     return "";
   }
@@ -608,239 +951,342 @@ function taskLink(url) {
 function renderTasks(tasks) {
   const container = document.getElementById("tasksList");
 
+  if (!container) return;
+
   if (!tasks.length) {
-    container.innerHTML = '<p class="empty">There are currently no available tasks. Please check again later.</p>';
+    container.innerHTML = "<p>No active tasks are available right now.</p>";
     return;
   }
 
-  container.innerHTML = tasks.map(task => `
-    <div class="task">
-      <h3>${safe(task.title)}</h3>
-      <p>${safe(task.description)}</p>
-      <p>Category: ${safe(task.category || "General")}</p>
-      <p class="reward">${money(task.reward)}</p>
-      ${taskLink(task.task_url)}
-      <button class="primary submit-task" data-id="${safe(task.id)}">
-        Submit Proof
-      </button>
-    </div>
-  `).join("");
+  container.innerHTML = tasks.map(task => {
+    const link = taskLink(task.task_url);
 
-  container.querySelectorAll(".submit-task").forEach(button => {
-    button.addEventListener("click", () => submitTask(button.dataset.id));
-  });
+    return `
+      <div class="task-card card">
+        <h3>${safe(task.title)}</h3>
+        <p>${safe(task.description)}</p>
+        <p><strong>Category:</strong> ${safe(task.category)}</p>
+        <p><strong>Reward:</strong> ${money(task.reward)}</p>
+        ${link ? `
+          <a href="${safe(link)}" target="_blank" rel="noopener noreferrer">
+            Open Task
+          </a>
+        ` : ""}
+        <button
+          type="button"
+          class="submit-task-button"
+          data-task-id="${safe(task.id)}"
+          data-task-title="${safe(task.title)}"
+        >
+          Submit Proof
+        </button>
+      </div>
+    `;
+  }).join("");
 }
 
-async function submitTask(taskId) {
+async function submitTask(taskId, taskTitle) {
   const proof = prompt(
-    "Enter your task proof.\n\nYou can provide a link, username, explanation or other evidence requested by the task."
+    "Enter your proof for: " + taskTitle +
+    "\n\nProvide a link or a short explanation."
   );
 
   if (proof === null) return;
 
-  if (proof.trim().length < 3) {
-    notify("Your proof must contain at least 3 characters.","error");
+  if (!proof.trim()) {
+    notify("Please enter proof before submitting.", true);
     return;
   }
 
-  if (proof.trim().length > 5000) {
-    notify("Your proof is too long. Please keep it under 5000 characters.","error");
-    return;
-  }
-
-  const {error} = await supabase.rpc("submit_tasknova_task",{
-    p_task_id:taskId,
-    p_proof:proof.trim()
-  });
+  const { error } = await supabase.rpc(
+    "submit_tasknova_task",
+    {
+      p_task_id: taskId,
+      p_proof: proof.trim()
+    }
+  );
 
   if (error) {
-    notify(error.message,"error");
+    notify(error.message || "Could not submit proof.", true);
     return;
   }
 
-  notify("Your task proof has been submitted successfully.");
+  notify("Your proof has been submitted for review.");
   await loadDashboard();
-  showTab("submissions");
 }
 
-function badge(status) {
-  const value = String(status || "unknown").toLowerCase();
-  return `<span class="badge ${safe(value)}">${safe(value)}</span>`;
-}
+document.addEventListener("click", event => {
+  const button = event.target.closest(".submit-task-button");
+
+  if (!button) return;
+
+  submitTask(
+    button.dataset.taskId,
+    button.dataset.taskTitle
+  );
+});
 
 function renderSubmissions(items) {
   const container = document.getElementById("submissionsList");
 
+  if (!container) return;
+
   if (!items.length) {
-    container.innerHTML = '<p class="empty">You have not submitted any tasks yet.</p>';
+    container.innerHTML = "<p>You have not submitted any tasks yet.</p>";
     return;
   }
 
   container.innerHTML = `
-    <table>
-      <thead><tr>
-        <th>Task</th><th>Reward</th><th>Status</th><th>Date</th>
-      </tr></thead>
-      <tbody>
-      ${items.map(item => `
-        <tr>
-          <td>${safe(item.task_title || "Task")}</td>
-          <td>${money(item.reward_snapshot)}</td>
-          <td>${badge(item.status)}</td>
-          <td>${safe(formatDate(item.created_at))}</td>
-        </tr>
-      `).join("")}
-      </tbody>
-    </table>`;
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Reward</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${items.map(item => `
+            <tr>
+              <td>${safe(item.task_title || "Task")}</td>
+              <td>${money(item.reward_snapshot)}</td>
+              <td>${badge(item.status)}</td>
+              <td>${formatDate(item.created_at)}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
 }
 
 function renderWithdrawals(items) {
   const container = document.getElementById("withdrawalsList");
 
+  if (!container) return;
+
   if (!items.length) {
-    container.innerHTML = '<p class="empty">You have not made any withdrawal requests.</p>';
+    container.innerHTML = "<p>You have no withdrawal requests yet.</p>";
     return;
   }
 
   container.innerHTML = `
-    <table>
-      <thead><tr>
-        <th>Amount</th><th>Method</th><th>Status</th><th>Date</th>
-      </tr></thead>
-      <tbody>
-      ${items.map(item => `
-        <tr>
-          <td>${money(item.amount)}</td> <td>${safe(item.payment_method || "—")}</td>
-          <td>${badge(item.status)}</td>
-          <td>${safe(formatDate(item.created_at))}</td>
-        </tr>
-      `).join("")}
-      </tbody>
-    </table>`;
-}function formatDate(value) {
-if (!value) return "—";
-const date = new Date(value);
-return Number.isNaN(date.getTime()) ? "—" : date.toLocaleString();
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Amount</th>
+            <th>Payment Method</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${items.map(item => `
+            <tr>
+              <td>${money(item.amount)}</td>
+              <td>${safe(item.payment_method)}</td>
+              <td>${badge(item.status)}</td>
+              <td>${formatDate(item.created_at)}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
 }
 
 function renderTransactions(items) {
-const container = document.getElementById("transactionsList");
+  const container = document.getElementById("transactionsList");
 
-if (!items.length) {
-container.innerHTML = '<p class="empty">No transactions yet.</p>';
-return;
+  if (!container) return;
+
+  if (!items.length) {
+    container.innerHTML = "<p>No wallet transactions yet.</p>";
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${items.map(item => `
+            <tr>
+              <td>${safe(item.description || "Wallet transaction")}</td>
+              <td>${safe(item.transaction_type || "—")}</td>
+              <td>${money(item.amount)}</td>
+              <td>${formatDate(item.created_at)}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
 }
 
-container.innerHTML = "<table> <thead><tr> <th>Type</th><th>Amount</th><th>Description</th><th>Date</th> </tr></thead> <tbody> ${items.map(item =>"
-<tr>
-<td>${safe(item.transaction_type || "—")}</td>
-<td>${money(item.amount)}</td>
-<td>${safe(item.description || "—")}</td>
-<td>${safe(formatDate(item.created_at))}</td>
-</tr>
-").join("")} </tbody> </table>";
-}
-
+/* Register the referral code used during signup, if one was supplied. */
 async function registerReferralIfNeeded() {
-const code = memberData?.profile?.referral_code;
-if (!code) return;
+  const profile = memberData?.profile || {};
+  const referralCode = profile.referral_code;
 
-const { error } = await supabase.rpc("register_tasknova_referral", {
-p_invite_code: code
-});
+  if (!referralCode || !String(referralCode).trim()) {
+    return;
+  }
 
-if (error && !/already|duplicate|unique/i.test(error.message)) {
-console.error("Referral registration:", error.message);
+  const { error } = await supabase.rpc(
+    "register_tasknova_referral",
+    {
+      p_invite_code: String(referralCode).trim()
+    }
+  );
+
+  if (error) {
+    console.warn("Referral registration:", error.message);
+  }
 }
+
+/* Withdrawal request */
+const withdrawForm = document.getElementById("withdrawForm");
+
+if (withdrawForm) {
+  withdrawForm.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const amount = Number(
+      document.getElementById("withdrawAmount").value
+    );
+
+    const paymentMethod =
+      document.getElementById("paymentMethod").value;
+
+    const paymentDetails =
+      document.getElementById("paymentDetails").value.trim();
+
+    const minimum = Number(
+      platformSettings.minimum_withdrawal || 5
+    );
+
+    const balance = Number(
+      memberData?.wallet?.balance || 0
+    );
+
+    if (!Number.isFinite(amount) || amount < minimum) {
+      notify(
+        "The minimum withdrawal is " + money(minimum) + ".",
+        true
+      );
+      return;
+    }
+
+    if (amount > balance) {
+      notify("Your withdrawal amount exceeds your available balance.", true);
+      return;
+    }
+
+    if (!paymentMethod || !paymentDetails) {
+      notify("Please complete all payment details.", true);
+      return;
+    }
+
+    const button = document.getElementById("withdrawButton");
+    button.disabled = true;
+    button.textContent = "Submitting...";
+
+    const { error } = await supabase.rpc(
+      "request_tasknova_withdrawal",
+      {
+        p_amount: amount,
+        p_payment_method: paymentMethod,
+        p_payment_details: paymentDetails
+      }
+    );
+
+    button.disabled = false;
+    button.textContent = "Submit Withdrawal Request";
+
+    if (error) {
+      notify(error.message || "Withdrawal request failed.", true);
+      return;
+    }
+
+    withdrawForm.reset();
+    notify("Your withdrawal request has been submitted.");
+    await loadDashboard();
+  });
 }
 
+/* Copy referral code */
+const copyCodeButton = document.getElementById("copyCodeButton");
+
+if (copyCodeButton) {
+  copyCodeButton.addEventListener("click", async () => {
+    const code = document.getElementById("inviteCode")?.textContent;
+
+    if (!code || code === "Not available" || code === "Loading...") {
+      notify("Your referral code is not available yet.", true);
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(code);
+      notify("Referral code copied.");
+    } catch {
+      const temporaryInput = document.createElement("textarea");
+      temporaryInput.value = code;
+      document.body.appendChild(temporaryInput);
+      temporaryInput.select();
+
+      try {
+        document.execCommand("copy");
+        notify("Referral code copied.");
+      } catch {
+        notify("Could not copy the code. Please copy it manually.", true);
+      }
+
+      temporaryInput.remove();
+    }
+  });
+}
+
+/* Logout */
 async function logout() {
-await supabase.auth.signOut();
-window.location.href = "login.html";
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    notify("Could not log out. Please try again.", true);
+    return;
+  }
+
+  window.location.href = "login.html";
 }
 
-document.addEventListener("click", function(event) {
-const button = event.target.closest(".nav[data-tab], [data-goto]");
+const logoutButton = document.getElementById("logoutButton");
 
-if (button) {
-event.preventDefault();
-
-const tabName = button.dataset.tab || button.dataset.goto;
-const target = document.getElementById(tabName);
-
-if (!target || !target.classList.contains("section")) return;
-
-document.querySelectorAll(".section").forEach(section => {
-  section.classList.remove("active");
-});
-
-target.classList.add("active");
-
-document.querySelectorAll(".nav[data-tab]").forEach(nav => {
-  nav.classList.toggle("active", nav.dataset.tab === tabName);
-});
-
-}
-});
-
-document.getElementById("logoutButton").addEventListener("click", logout);
-
-document.getElementById("copyCodeButton").addEventListener("click", async () => {
-const code = document.getElementById("inviteCode").textContent;
-
-if (!code || code === "Loading..." || code === "Not available") {
-notify("Your invitation code is not available yet.", "error");
-return;
+if (logoutButton) {
+  logoutButton.addEventListener("click", logout);
 }
 
-try {
-await navigator.clipboard.writeText(code);
-notify("Invitation code copied.");
-} catch {
-notify("Please copy your invitation code manually: " + code, "error");
-}
-});
-
-document.getElementById("withdrawForm").addEventListener("submit", async event => {
-event.preventDefault();
-
-const button = document.getElementById("withdrawButton");
-const amount = Number(document.getElementById("withdrawAmount").value);
-const method = document.getElementById("paymentMethod").value;
-const details = document.getElementById("paymentDetails").value.trim();
-
-button.disabled = true;
-button.textContent = "Submitting...";
-
-const { error } = await supabase.rpc("request_tasknova_withdrawal", {
-p_amount: amount,
-p_payment_method: method,
-p_payment_details: details
-});
-
-button.disabled = false;
-button.textContent = "Submit Withdrawal Request";
-
-if (error) {
-notify(error.message, "error");
-return;
-}
-
-event.target.reset();
-notify("Your withdrawal request has been submitted.");
-await loadDashboard();
-showTab("withdraw");
-});
-
+/* Start the member dashboard */
 async function startDashboard() {
-await loadSettings();
-await loadDashboard();
+  const loggedIn = await checkLogin();
+
+  if (!loggedIn) return;
+
+  await loadSettings();
+  await loadDashboard();
 }
 
-startDashboard();
+document.addEventListener("DOMContentLoaded", startDashboard);
 </script>
-
 </body>
 </html>
-        
-      
