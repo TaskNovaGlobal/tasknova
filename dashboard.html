@@ -710,5 +710,137 @@ function renderWithdrawals(items) {
       <tbody>
       ${items.map(item => `
         <tr>
-          <td>${money(item.amount)}</td>
+          <td>${money(item.amount)}</td> <td>${safe(item.payment_method || "—")}</td>
+          <td>${badge(item.status)}</td>
+          <td>${safe(formatDate(item.created_at))}</td>
+        </tr>
+      `).join("")}
+      </tbody>
+    </table>`;
+}function formatDate(value) {
+if (!value) return "—";
+const date = new Date(value);
+return Number.isNaN(date.getTime()) ? "—" : date.toLocaleString();
+}
+
+function renderTransactions(items) {
+const container = document.getElementById("transactionsList");
+
+if (!items.length) {
+container.innerHTML = '<p class="empty">No transactions yet.</p>';
+return;
+}
+
+container.innerHTML = "<table> <thead><tr> <th>Type</th><th>Amount</th><th>Description</th><th>Date</th> </tr></thead> <tbody> ${items.map(item =>"
+<tr>
+<td>${safe(item.transaction_type || "—")}</td>
+<td>${money(item.amount)}</td>
+<td>${safe(item.description || "—")}</td>
+<td>${safe(formatDate(item.created_at))}</td>
+</tr>
+").join("")} </tbody> </table>";
+}
+
+async function registerReferralIfNeeded() {
+const code = memberData?.profile?.referral_code;
+if (!code) return;
+
+const { error } = await supabase.rpc("register_tasknova_referral", {
+p_invite_code: code
+});
+
+if (error && !/already|duplicate|unique/i.test(error.message)) {
+console.error("Referral registration:", error.message);
+}
+}
+
+async function logout() {
+await supabase.auth.signOut();
+window.location.href = "login.html";
+}
+
+document.addEventListener("click", function(event) {
+const button = event.target.closest(".nav[data-tab], [data-goto]");
+
+if (button) {
+event.preventDefault();
+
+const tabName = button.dataset.tab || button.dataset.goto;
+const target = document.getElementById(tabName);
+
+if (!target || !target.classList.contains("section")) return;
+
+document.querySelectorAll(".section").forEach(section => {
+  section.classList.remove("active");
+});
+
+target.classList.add("active");
+
+document.querySelectorAll(".nav[data-tab]").forEach(nav => {
+  nav.classList.toggle("active", nav.dataset.tab === tabName);
+});
+
+}
+});
+
+document.getElementById("logoutButton").addEventListener("click", logout);
+
+document.getElementById("copyCodeButton").addEventListener("click", async () => {
+const code = document.getElementById("inviteCode").textContent;
+
+if (!code || code === "Loading..." || code === "Not available") {
+notify("Your invitation code is not available yet.", "error");
+return;
+}
+
+try {
+await navigator.clipboard.writeText(code);
+notify("Invitation code copied.");
+} catch {
+notify("Please copy your invitation code manually: " + code, "error");
+}
+});
+
+document.getElementById("withdrawForm").addEventListener("submit", async event => {
+event.preventDefault();
+
+const button = document.getElementById("withdrawButton");
+const amount = Number(document.getElementById("withdrawAmount").value);
+const method = document.getElementById("paymentMethod").value;
+const details = document.getElementById("paymentDetails").value.trim();
+
+button.disabled = true;
+button.textContent = "Submitting...";
+
+const { error } = await supabase.rpc("request_tasknova_withdrawal", {
+p_amount: amount,
+p_payment_method: method,
+p_payment_details: details
+});
+
+button.disabled = false;
+button.textContent = "Submit Withdrawal Request";
+
+if (error) {
+notify(error.message, "error");
+return;
+}
+
+event.target.reset();
+notify("Your withdrawal request has been submitted.");
+await loadDashboard();
+showTab("withdraw");
+});
+
+async function startDashboard() {
+await loadSettings();
+await loadDashboard();
+}
+
+startDashboard();
+</script>
+
+</body>
+</html>
+        
       
