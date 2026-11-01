@@ -514,4 +514,110 @@ async function reviewWithdrawal(id,decision){
  await loadAdminData();
 }
 async function markPaid(id){
- if(!confirm("Confirm that you have manually paid this withdrawal?"
+ if(!confirm("Confirm that you have manually paid this withdrawal?""))return;
+ const {error}=await db.rpc("admin_mark_withdrawal_paid",{p_withdrawal_id:id});
+ if(error){showMessage("Mark paid failed: "+error.message,"error");return;}
+ showMessage("Withdrawal marked as paid.");
+ await loadAdminData();
+}
+
+async function payReferral(id){
+ if(!confirm("Pay this qualified referral bonus?"))return;
+ const {error}=await db.rpc("admin_pay_qualified_referral",{p_referral_id:id});
+ if(error){showMessage("Referral payment failed: "+error.message,"error");return;}
+ showMessage("Referral bonus paid.");
+ await loadAdminData();
+}
+
+async function loadReferralSettings(){
+ const {data,error}=await db.rpc("get_tasknova_admin_dashboard");
+ if(error){showMessage("Could not load referral settings: "+error.message,"error");return;}
+ const d=normalizeDashboard(data);
+ const settings=d.referral_settings||{};
+ $("refEnabled").value=String(!!settings.enabled);
+ $("refBonus").value=settings.bonus_amount??0;
+}
+
+$("saveReferralBtn").addEventListener("click",async()=>{
+ const bonus=Number($("refBonus").value);
+ if(!Number.isFinite(bonus)||bonus<0){
+  showMessage("Enter a valid referral bonus amount.","error");return;
+ }
+ const button=$("saveReferralBtn");
+ button.disabled=true;
+ const {error}=await db.rpc("admin_set_referral_settings",{
+  p_enabled:$("refEnabled").value==="true",
+  p_bonus_amount:bonus
+ });
+ button.disabled=false;
+ if(error){showMessage("Saving referral settings failed: "+error.message,"error");return;}
+ showMessage("Referral settings saved.");
+ await loadAdminData();
+});
+
+async function loadSettings(){
+ const {data,error}=await db.rpc("get_tasknova_platform_settings");
+ if(error){showMessage("Could not load platform settings: "+error.message,"error");return;}
+ const settings=Array.isArray(data)?data[0]:data;
+ if(!settings)return;
+ $("platformName").value=settings.platform_name||"TaskNova";
+ $("minimumWithdrawal").value=settings.minimum_withdrawal??5;
+ $("maintenanceMode").value=String(!!settings.maintenance_mode);
+ $("registrationsEnabled").value=String(settings.registrations_enabled!==false);
+}
+
+$("settingsForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const minimum=Number($("minimumWithdrawal").value);
+ if(!Number.isFinite(minimum)||minimum<5){
+  showMessage("Minimum withdrawal cannot be less than $5.","error");return;
+ }
+ const button=$("settingsForm").querySelector('button[type="submit"]');
+ button.disabled=true;
+ const {error}=await db.rpc("admin_update_platform_settings",{
+  p_platform_name:$("platformName").value.trim(),
+  p_minimum_withdrawal:minimum,
+  p_maintenance_mode:$("maintenanceMode").value==="true",
+  p_registrations_enabled:$("registrationsEnabled").value==="true"
+ });
+ button.disabled=false;
+ if(error){showMessage("Saving platform settings failed: "+error.message,"error");return;}
+ showMessage("Platform settings saved.");
+});
+
+async function loadLogs(){
+ const root=$("logList");
+ root.textContent="Loading audit logs...";
+ const {data,error}=await db.rpc("get_tasknova_audit_logs");
+ if(error){root.textContent="Audit logs could not be loaded: "+error.message;return;}
+ root.innerHTML="";
+ const rows=list(data);
+ if(!rows.length){root.textContent="No audit log entries returned.";return;}
+ rows.forEach(log=>{
+  const item=make("div",undefined,"item");
+  item.append(make("h3",safe(log.action||log.operation||log.event_type||"Audit event")));
+  item.append(make("p","Table: "+safe(log.table_name)));
+  item.append(make("p","Time: "+safe(log.created_at)));
+  item.append(make("p","Record: "+safe(log.record_id)));
+  root.append(item);
+ });
+}
+
+$("logoutBtn").addEventListener("click",async()=>{
+ await db.auth.signOut();
+ location.href="login.html";
+});
+
+(async function init(){
+ const allowed=await checkAdmin();
+ if(!allowed)return;
+ await Promise.all([
+  loadAdminData(),
+  loadTasks(),
+  loadSettings(),
+  loadReferralSettings()
+ ]);
+})();
+</script>
+</body>
+</html>
