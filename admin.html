@@ -514,7 +514,7 @@ async function reviewWithdrawal(id,decision){
  await loadAdminData();
 }
 async function markPaid(id){
- if(!confirm("Confirm that you have manually paid this withdrawal?""))return;
+ if(!confirm("Confirm that you have manually paid this withdrawal?"))return;
  const {error}=await db.rpc("admin_mark_withdrawal_paid",{p_withdrawal_id:id});
  if(error){showMessage("Mark paid failed: "+error.message,"error");return;}
  showMessage("Withdrawal marked as paid.");
