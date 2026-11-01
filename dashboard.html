@@ -437,24 +437,43 @@ function notify(message, type="success") {
 }
 
 function showTab(tabName) {
-  document.querySelectorAll(".section").forEach(section => {
-    section.classList.remove("active");
-  });
+const allowedTabs = [
+"overview",
+"tasks",
+"submissions",
+"wallet",
+"withdraw",
+"referrals",
+"transactions"
+];
 
-  document.querySelectorAll(".nav").forEach(button => {
-    button.classList.toggle("active", button.dataset.tab === tabName);
-  });
+if (!allowedTabs.includes(tabName)) return;
 
-  const target = document.getElementById(tabName);
-  if (target) target.classList.add("active");
-}
-
-document.querySelectorAll(".nav").forEach(button => {
-  button.addEventListener("click", () => showTab(button.dataset.tab));
+document.querySelectorAll("main .section").forEach(section => {
+section.classList.toggle("active", section.id === tabName);
 });
 
-document.querySelectorAll("[data-goto]").forEach(button => {
-  button.addEventListener("click", () => showTab(button.dataset.goto));
+document.querySelectorAll(".sidebar .nav").forEach(button => {
+button.classList.toggle("active", button.dataset.tab === tabName);
+});
+
+window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+document.addEventListener("click", function(event) {
+const navButton = event.target.closest(".sidebar .nav[data-tab]");
+const gotoButton = event.target.closest("[data-goto]");
+
+if (navButton) {
+event.preventDefault();
+showTab(navButton.dataset.tab);
+return;
+}
+
+if (gotoButton) {
+event.preventDefault();
+showTab(gotoButton.dataset.goto);
+}
 });
 
 async function loadSettings() {
