@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#7041d8">
+  <title>Withdraw Earnings | TaskNova</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f7fc;
+      color: #171323;
+      padding-bottom: 90px;
+    }
+
+    .header {
+      background: #fff;
+      padding: 17px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #eeeaf5;
+    }
+
+    .brand {
+      font-size: 22px;
+      font-weight: 800;
+      color: #7041d8;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 10px;
+      color: #777;
+      font-weight: 400;
+      margin-top: 3px;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #7041d8;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: auto;
+      padding: 24px 17px;
+    }
+
+    .page-heading {
+      margin-bottom: 22px;
+    }
+
+    .page-heading h1 {
+      font-size: 27px;
+      margin-bottom: 7px;
+    }
+
+    .page-heading p {
+      color: #77717f;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .balance-card {
+      background: linear-gradient(135deg, #8152e8, #572bb8);
+      color: #fff;
+      border-radius: 19px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 22px rgba(92, 49, 183, .18);
+    }
+
+    .balance-card small {
+      font-size: 13px;
+      opacity: .85;
+    }
+
+    .balance-card h2 {
+      font-size: 32px;
+      margin: 9px 0;
+    }
+
+    .balance-card p {
+      font-size: 12px;
+      opacity: .85;
+    }
+
+    .info-card {
+      background: #fff;
+      border: 1px solid #e9e5ef;
+      border-radius: 15px;
+      padding: 16px;
+      margin-bottom: 17px;
+      box-shadow: 0 3px 10px rgba(25, 15, 50, .035);
+    }
+
+    .info-card h3 {
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .info-card p {
+      color: #817b89;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .minimum-progress {
+      height: 8px;
+      background: #eeeaf5;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 13px;
+    }
+
+    .minimum-progress div {
+      height: 100%;
+      width: 0;
+      background: #7041d8;
+      border-radius: 20px;
+      transition: width .3s;
+    }
+
+    .section-card {
+      background: #fff;
+      border: 1px solid #e9e5ef;
+      border-radius: 16px;
+      padding: 19px;
+      margin-bottom: 17px;
+      box-shadow: 0 3px 10px rgba(25, 15, 50, .035);
+    }
+
+    .section-card h3 {
+      font-size: 17px;
+      margin-bottom: 7px;
+    }
+
+    .section-card > p {
+      color: #817b89;
+      font-size: 12px;
+      line-height: 1.5;
+      margin-bottom: 17px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 12px;
+      border: 1px solid #e3ddec;
+      border-radius: 10px;
+      background: #fff;
+      color: #292333;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #7041d8;
+    }
+
+    .form-group textarea {
+      min-height: 85px;
+      resize: vertical;
+    }
+
+    .amount-note {
+      font-size: 11px;
+      color: #817b89;
+      margin-top: 7px;
+    }
+
+    .submit-button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #8152e8, #572bb8);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .submit-button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      padding: 13px;
+      border-radius: 10px;
+      margin-top: 13px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .message.success {
+      display: block;
+      background: #e5f8ed;
+      color: #16834a;
+    }
+
+    .message.error {
+      display: block;
+      background: #ffebeb;
+      color: #c53a3a;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: #fff;
+      border-top: 1px solid #eeeaf5;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: #898391;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      min-width: 50px;
+    }
+
+    .nav-item span:first-child {
+      font-size: 20px;
+    }
+
+    .nav-item.active {
+      color: #7041d8;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body><header class="header">
+  <div class="brand">
+    TaskNova
+    <small>Complete tasks. Earn rewards.</small>
+  </div>
+
+  <div class="profile">
+    <span id="headerName">Member</span>
+    <div class="avatar" id="avatar">M</div>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="page-heading">
+    <h1>Withdraw Earnings</h1>
+    <p>Request payment of your approved TaskNova earnings.</p>
+  </div>
+
+  <section class="balance-card">
+    <small>Available balance</small>
+    <h2 id="availableBalance">$0.00</h2>
+    <p>Only approved earnings are available for withdrawal.</p>
+  </section>
+
+  <section class="info-card">
+    <h3>Minimum withdrawal: $5.00</h3>
+    <p id="minimumMessage">
+      You need at least $5.00 in available balance to request a withdrawal.
+    </p>
+
+    <div class="minimum-progress">
+      <div id="minimumProgress"></div>
+    </div>
+  </section>
+
+  <section class="section-card">
+    <h3>Withdrawal request</h3>
+    <p>
+      Enter your payment details carefully. Your request will be
+      reviewed by the TaskNova administration team.
+    </p>
+
+    <form id="withdrawForm">
+
+      <div class="form-group">
+        <label for="withdrawAmount">Withdrawal amount (USD)</label>
+        <input
+          type="number"
+          id="withdrawAmount"
+          min="5"
+          step="0.01"
+          placeholder="Enter amount"
+          required
+        >
+        <div class="amount-note">
+          Minimum $5.00. Maximum: your available balance.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="paymentMethod">Payment method</label>
+        <select id="paymentMethod" required>
+          <option value="">Select payment method</option>
+          <option value="Bank Transfer">Bank Transfer</option>
+          <option value="PayPal">PayPal</option>
+          <option value="Payoneer">Payoneer</option>
+          <option value="Crypto">Cryptocurrency</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="paymentDetails">Payment details</label>
+        <textarea
+          id="paymentDetails"
+          placeholder="Enter your account name, account number, bank name, PayPal email or wallet address as applicable."
+          required
+        ></textarea>
+      </div>
+
+      <button
+        type="submit"
+        class="submit-button"
+        id="withdrawButton"
+      >
+        Request withdrawal
+      </button>
+
+      <div class="message" id="withdrawMessage"></div>
+    </form>
+  </section>
+
+  <section class="info-card">
+    <h3>Withdrawal processing</h3>
+    <p>
+      All withdrawal requests are reviewed manually. Your balance
+      is not paid automatically when you submit a request.
+      You can check the status of your request in your withdrawal history.
+    </p>
+  </section>
+
+  <section class="section-card">
+    <h3>Recent withdrawals</h3>
+    <p>Track your previous withdrawal requests.</p>
+
+    <div id="withdrawalHistory">
+      <p style="text-align:center;color:#888;font-size:13px;padding:15px">
+        Loading withdrawal history...
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<nav class="bottom-nav">
+  <a href="dashboard.html" class="nav-item">
+    <span>⌂</span>
+    <span>Home</span>
+  </a>
+
+  <a href="offers.html" class="nav-item">
+    <span>▣</span>
+    <span>Offers</span>
+  </a>
+
+  <a href="history.html" class="nav-item">
+    <span>◷</span>
+    <span>History</span>
+  </a>
+
+  <a href="referrals.html" class="nav-item">
+    <span>♧</span>
+    <span>Refer</span>
+  </a>
+
+  <a href="withdraw.html" class="nav-item active">
+    <span>＄</span>
+    <span>Withdraw</span>
+  </a>
+</nav><script>
+const SUPABASE_URL = "https://nplaagzwpthofvounzma.supabase.co";
+const SUPABASE_KEY = "sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const MINIMUM_WITHDRAWAL = 5;
+let availableBalance = 0;
+
+function money(value) {
+  return "$" + Number(value || 0).toFixed(2);
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[character]);
+}
+
+function showMessage(message, type) {
+  const box = document.getElementById("withdrawMessage");
+  box.textContent = message;
+  box.className = "message " + type;
+}
+
+function normaliseStatus(status) {
+  const value = String(status || "pending").toLowerCase();
+
+  if (["paid", "completed"].includes(value)) return "paid";
+  if (["approved"].includes(value)) return "approved";
+  if (["rejected", "declined"].includes(value)) return "rejected";
+
+  return "pending";
+}
+
+function renderWithdrawalHistory(items) {
+  const container = document.getElementById("withdrawalHistory");
+
+  if (!Array.isArray(items) || items.length === 0) {
+    container.innerHTML = `
+      <p style="text-align:center;color:#888;font-size:13px;padding:15px">
+        You have no withdrawal requests yet.
+      </p>
+    `;
+    return;
+  }
+
+  container.innerHTML = items.map(item => {
+    const status = normaliseStatus(item.status);
+    const date = item.created_at
+      ? new Date(item.created_at).toLocaleDateString()
+      : "Date unavailable";
+
+    return `
+      <div style="border:1px solid #eeeaf5;border-radius:12px;padding:14px;margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;gap:10px">
+          <strong>${money(item.amount)}</strong>
+          <span style="font-size:11px;font-weight:700;color:${
+            status === "paid" ? "#16834a" :
+            status === "rejected" ? "#c53a3a" : "#a36b08"
+          }">${escapeHTML(status.toUpperCase())}</span>
+        </div>
+        <p style="font-size:12px;color:#817b89;margin-top:7px">
+          ${escapeHTML(item.payment_method || "Payment method")}
+          · ${escapeHTML(date)}
+        </p>
+      </div>
+    `;
+  }).join("");
+}
+
+function updateMinimumProgress() {
+  const progress = Math.min(
+    100,
+    (availableBalance / MINIMUM_WITHDRAWAL) * 100
+  );
+
+  document.getElementById("minimumProgress").style.width =
+    progress + "%";
+
+  document.getElementById("minimumMessage").textContent =
+    availableBalance >= MINIMUM_WITHDRAWAL
+      ? "You have reached the minimum withdrawal amount."
+      : `You need ${money(MINIMUM_WITHDRAWAL - availableBalance)} more to reach the minimum withdrawal amount.`;
+}
+
+async function loadWithdrawalData() {
+  const {
+    data: authData,
+    error: authError
+  } = await db.auth.getUser();
+
+  if (authError || !authData.user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  const {
+    data,
+    error
+  } = await db.rpc("get_tasknova_member_dashboard");
+
+  if (error) {
+    document.getElementById("withdrawalHistory").textContent =
+      "Unable to load withdrawal information.";
+    return;
+  }
+
+  const dashboard = data || {};
+  const profile = dashboard.profile || {};
+  const wallet = dashboard.wallet || {};
+
+  const fullName =
+    profile.full_name ||
+    authData.user.user_metadata?.full_name ||
+    "Member";
+
+  document.getElementById("headerName").textContent =
+    fullName.split(" ")[0];
+
+  document.getElementById("avatar").textContent =
+    fullName.charAt(0).toUpperCase();
+
+  availableBalance = Number(wallet.balance || 0);
+
+  document.getElementById("availableBalance").textContent =
+    money(availableBalance);
+
+  const amountInput = document.getElementById("withdrawAmount");
+  amountInput.max = availableBalance;
+
+  updateMinimumProgress();
+
+  renderWithdrawalHistory(
+    Array.isArray(dashboard.withdrawals)
+      ? dashboard.withdrawals
+      : []
+  );
+}
+
+document.getElementById("withdrawForm").addEventListener(
+  "submit",
+  async function(event) {
+    event.preventDefault();
+
+    const amount = Number(
+      document.getElementById("withdrawAmount").value
+    );
+
+    const paymentMethod =
+      document.getElementById("paymentMethod").value;
+
+    const paymentDetails =
+      document.getElementById("paymentDetails").value.trim();
+
+    if (!Number.isFinite(amount) || amount < MINIMUM_WITHDRAWAL) {
+      showMessage("The minimum withdrawal amount is $5.00.", "error");
+      return;
+    }
+
+    if (amount > availableBalance) {
+      showMessage("Your withdrawal amount exceeds your available balance.", "error");
+      return;
+    }
+
+    if (!paymentMethod || !paymentDetails) {
+      showMessage("Please complete all payment details.", "error");
+      return;
+    }
+
+    const button = document.getElementById("withdrawButton");
+    button.disabled = true;
+    button.textContent = "Submitting...";
+
+    const { error } = await db.rpc(
+      "request_tasknova_withdrawal",
+      {
+        p_amount: amount,
+        p_payment_method: paymentMethod,
+        p_payment_details: paymentDetails
+      }
+    );
+
+    if (error) {
+      showMessage(
+        error.message || "Unable to submit your withdrawal request.",
+        "error"
+      );
+
+      button.disabled = false;
+      button.textContent = "Request withdrawal";
+      return;
+    }
+
+    showMessage(
+      "Your withdrawal request has been submitted for admin review.",
+      "success"
+    );
+
+    document.getElementById("withdrawForm").reset();
+    button.textContent = "Request submitted";
+
+    await loadWithdrawalData();
+  }
+);
+
+loadWithdrawalData();
+</script>
+
+</body>
+</html>
