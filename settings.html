@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | TaskNova</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #f8f7fb;
+      color: #211d29;
+      padding-bottom: 90px;
+    }
+
+    .header {
+      background: #fff;
+      padding: 17px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #eeeaf3;
+    }
+
+    .brand {
+      font-size: 23px;
+      font-weight: 800;
+      color: #6335d7;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 10px;
+      color: #77717f;
+      font-weight: 400;
+      margin-top: 3px;
+    }
+
+    .profile-avatar {
+      width: 39px;
+      height: 39px;
+      border-radius: 50%;
+      background: #eee8ff;
+      color: #6335d7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 650px;
+      margin: auto;
+      padding: 23px 17px;
+    }
+
+    .page-heading {
+      margin-bottom: 22px;
+    }
+
+    .page-heading h1 {
+      font-size: 27px;
+      margin-bottom: 7px;
+    }
+
+    .page-heading p {
+      color: #77717f;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .settings-card {
+      background: #fff;
+      border: 1px solid #eeeaf3;
+      border-radius: 17px;
+      padding: 19px;
+      margin-bottom: 17px;
+      box-shadow: 0 4px 13px rgba(30, 20, 50, 0.035);
+    }
+
+    .settings-card h3 {
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    .settings-link {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 14px 0;
+      border-bottom: 1px solid #f0edf4;
+      text-decoration: none;
+      color: #292431;
+      font-size: 13px;
+    }
+
+    .settings-link:last-child {
+      border-bottom: none;
+    }
+
+    .settings-icon {
+      width: 39px;
+      height: 39px;
+      border-radius: 12px;
+      background: #f0eaff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .settings-link small {
+      display: block;
+      color: #88818f;
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    .settings-arrow {
+      margin-left: auto;
+      color: #99919f;
+      font-size: 20px;
+    }
+
+    .info-box {
+      background: #f2edff;
+      border: 1px solid #e4d9ff;
+      border-radius: 13px;
+      padding: 15px;
+      color: #59418d;
+      font-size: 12px;
+      line-height: 1.7;
+      margin-bottom: 17px;
+    }
+
+    .logout-button {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #f0caca;
+      background: #fff5f5;
+      color: #c03939;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: #fff;
+      border-top: 1px solid #eeeaf3;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: #898391;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      min-width: 52px;
+    }
+
+    .nav-item span:first-child {
+      font-size: 19px;
+    }
+
+    .nav-item.active {
+      color: #6335d7;
+      font-weight: 700;
+    }
+  </style>
+</head><body>
+
+  <header class="header">
+    <div class="brand">
+      TaskNova
+      <small>Your tasks. Your rewards.</small>
+    </div>
+    <div class="profile-avatar" id="headerAvatar">U</div>
+  </header>
+
+  <main class="container">
+
+    <div class="page-heading">
+      <h1>Settings</h1>
+      <p>Manage your TaskNova account and preferences.</p>
+    </div>
+
+    <div class="info-box">
+      Your account settings are protected. Keep your login details private and use a strong password to secure your account.
+    </div>
+
+    <section class="settings-card">
+      <h3>Account Management</h3>
+
+      <a href="profile.html" class="settings-link">
+        <span class="settings-icon">👤</span>
+        <span>
+          Personal Profile
+          <small>Update your name, username and country</small>
+        </span>
+        <span class="settings-arrow">›</span>
+      </a>
+
+      <a href="profile.html#security" class="settings-link" id="passwordSettingsLink">
+        <span class="settings-icon">🔐</span>
+        <span>
+          Password and Security
+          <small>Manage your account password</small>
+        </span>
+        <span class="settings-arrow">›</span>
+      </a>
+
+      <a href="withdraw.html" class="settings-link">
+        <span class="settings-icon">💳</span>
+        <span>
+          Payment Details
+          <small>Manage your withdrawal requests</small>
+        </span>
+        <span class="settings-arrow">›</span>
+      </a>
+    </section>
+
+    <section class="settings-card">
+      <h3>Activity</h3>
+
+      <a href="history.html" class="settings-link">
+        <span class="settings-icon">📋</span>
+        <span>
+          Task History
+          <small>View your submitted tasks and results</small>
+        </span>
+        <span class="settings-arrow">›</span>
+      </a>
+
+      <a href="referrals.html" class="settings-link">
+        <span class="settings-icon">🎁</span>
+        <span>
+          Referral Activity
+          <small>View your referrals and rewards</small>
+        </span>
+        <span class="settings-arrow">›</span>
+      </a>
+
+      <a href="dashboard.html" class="settings-link">
+        <span class="settings-icon">💰</span>
+        <span>
+          My Wallet
+          <small>Check your earnings and balance</small>
+        </span>
+        <span class="settings-arrow">›</span>
+      </a>
+    </section>
+
+    <section class="settings-card">
+      <h3>Legal and Support</h3>
+
+      <a href="terms.html" class="settings-link">
+        <span class="settings-icon">📄</span>
+        <span>
+          Terms and Conditions
+          <small>Read the platform terms</small>
+        </span>
+        <span class="settings-arrow">›</span>
+      </a>
+
+      <a href="privacy.html" class="settings-link">
+        <span class="settings-icon">🛡️</span>
+        <span>
+          Privacy Policy
+          <small>Learn how your information is handled</small>
+        </span>
+        <span class="settings-arrow">›</span>
+      </a>
+    </section>
+
+    <section class="settings-card">
+      <h3>Sign Out</h3>
+      <p style="font-size:12px;color:#77717f;line-height:1.6;margin-bottom:15px;">
+        Sign out of your TaskNova account on this device.
+      </p>
+
+      <button class="logout-button" id="logoutButton" type="button">
+        Log Out
+      </button>
+
+      <p id="settingsMessage" style="font-size:12px;margin-top:12px;"></p>
+    </section>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-item">
+      <span>🏠</span>
+      <span>Home</span>
+    </a>
+
+    <a href="offers.html" class="nav-item">
+      <span>🎯</span>
+      <span>Offers</span>
+    </a>
+
+    <a href="history.html" class="nav-item">
+      <span>📋</span>
+      <span>History</span>
+    </a>
+
+    <a href="referrals.html" class="nav-item">
+      <span>🎁</span>
+      <span>Refer</span>
+    </a>
+
+    <a href="profile.html" class="nav-item">
+      <span>👤</span>
+      <span>Profile</span>
+    </a>
+  </nav>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const SUPABASE_URL = "https://nplaagzwpthofvounzma.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_L0govATO3SUeAMmbGGMJnw_F-S0jApB";
+
+    const db = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    async function loadSettings() {
+      const { data, error } = await db.auth.getUser();
+
+      if (error || !data.user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      const { data: dashboard } = await db.rpc(
+        "get_tasknova_member_dashboard"
+      );
+
+      const profile = dashboard?.profile || {};
+      const name = profile.full_name || profile.username || "User";
+
+      document.getElementById("headerAvatar").textContent =
+        name.trim().charAt(0).toUpperCase() || "U";
+    }
+
+    document.getElementById("logoutButton").addEventListener(
+      "click",
+      async function () {
+        const button = this;
+        const message = document.getElementById("settingsMessage");
+
+        button.disabled = true;
+        button.textContent = "Signing out...";
+
+        const { error } = await db.auth.signOut();
+
+        if (error) {
+          message.textContent = error.message;
+          message.style.color = "#c03939";
+          button.disabled = false;
+          button.textContent = "Log Out";
+          return;
+        }
+
+        window.location.href = "login.html";
+      }
+    );
+
+    loadSettings();
+  </script>
+
+</body>
+</html>
