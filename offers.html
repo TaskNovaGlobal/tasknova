@@ -350,3 +350,295 @@ button,input{font:inherit}
 </style>
 </head>
 <body>
+<header class="topbar">
+  <a class="brand" href="index.html">
+    Task<span>Nova</span>
+    <small>YOUR TASKS. YOUR REWARDS.</small>
+  </a>
+
+  <div class="profile">
+    <span id="headerName">Member</span>
+    <div class="avatar" id="avatar">T</div>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="page-heading">
+    <h1>Explore Offers 🎯</h1>
+    <p>Complete tasks, submit proof and earn rewards.</p>
+  </section>
+
+  <section class="offer-banner">
+    <span class="tag">✦ TASKNOVA OFFERS</span>
+    <h2>Earn while you complete tasks</h2>
+    <p>Choose an available offer, follow its instructions and submit your proof to earn rewards after approval.</p>
+  </section>
+
+  <div class="search-box">
+    <span>🔍</span>
+    <input
+      type="search"
+      id="searchInput"
+      placeholder="Search available tasks..."
+      autocomplete="off"
+    >
+  </div>
+
+  <div class="category-tabs">
+    <button class="category-tab active" data-category="all">All Offers</button>
+    <button class="category-tab" data-category="app install">App Install</button>
+    <button class="category-tab" data-category="quick task">Quick Task</button>
+    <button class="category-tab" data-category="survey">Surveys</button>
+    <button class="category-tab" data-category="social media">Social Media</button>
+    <button class="category-tab" data-category="website">Website</button>
+    <button class="category-tab" data-category="video">Videos</button>
+  </div>
+
+  <div class="section-title">
+    <h2>Available tasks</h2>
+    <span id="offerCount">Loading...</span>
+  </div>
+
+  <div id="offerList" class="offer-list">
+    <div class="loading">Loading available offers...</div>
+  </div>
+
+</main>
+
+<nav class="bottom-nav">
+
+  <a href="dashboard.html">
+    <span>⌂</span>Home
+  </a>
+
+  <a class="active" href="offers.html">
+    <span>▣</span>Offers
+  </a>
+
+  <a href="history.html">
+    <span>◷</span>History
+  </a>
+
+  <a href="referrals.html">
+    <span>♧</span>Refer
+  </a>
+
+  <a href="withdraw.html">
+    <span>⇧</span>Withdraw
+  </a>
+
+</nav><script>
+const SUPABASE_URL = "https://nplaagzwpthofvounzma.supabase.co";
+const SUPABASE_KEY = "sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+let allTasks = [];
+let activeCategory = "all";
+
+const money = value =>
+  "$" + Number(value || 0).toFixed(2);
+
+function taskIcon(task) {
+  const text = (
+    (task.title || "") + " " +
+    (task.category || "")
+  ).toLowerCase();
+
+  if (text.includes("video")) return "▶️";
+  if (text.includes("survey")) return "📋";
+  if (text.includes("install") || text.includes("app")) return "📱";
+  if (text.includes("review")) return "⭐";
+  if (text.includes("website")) return "🌐";
+  if (text.includes("social")) return "📣";
+
+  return "🎯";
+}
+
+function normalise(value) {
+  return String(value || "").toLowerCase().trim();
+}
+
+function matchesCategory(task, category) {
+  if (category === "all") return true;
+
+  const taskCategory = normalise(task.category);
+  const title = normalise(task.title);
+
+  if (category === "quick task") {
+    return taskCategory.includes("quick") ||
+           taskCategory.includes("quick task");
+  }
+
+  return taskCategory.includes(category) ||
+         title.includes(category);
+}
+
+function renderTasks() {
+  const container = document.getElementById("offerList");
+  const search = normalise(
+    document.getElementById("searchInput").value
+  );
+
+  const filtered = allTasks.filter(task => {
+    const title = normalise(task.title);
+    const description = normalise(task.description);
+    const category = normalise(task.category);
+
+    const matchesSearch =
+      title.includes(search) ||
+      description.includes(search) ||
+      category.includes(search);
+
+    return matchesSearch &&
+           matchesCategory(task, activeCategory);
+  });
+
+  document.getElementById("offerCount").textContent =
+    filtered.length + (filtered.length === 1 ? " offer" : " offers");
+
+  container.innerHTML = "";
+
+  if (!filtered.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">🎯</div>
+        <h3>No offers found</h3>
+        <p>Try another category or check again later.</p>
+      </div>
+    `;
+    return;
+  }
+
+  filtered.forEach(task => {
+    const title = task.title || "Available task";
+    const description =
+      task.description ||
+      task.instructions ||
+      "Complete the task and submit your proof.";
+
+    const category = task.category || "Quick Task";
+
+    const reward =
+      task.reward ??
+      task.reward_amount ??
+      task.amount ??
+      0;
+
+    const card = document.createElement("article");
+    card.className = "offer-card";
+
+    card.innerHTML = `
+      <div class="offer-icon">${taskIcon(task)}</div>
+
+      <div class="offer-details">
+        <h3></h3>
+        <p></p>
+        <span class="offer-category"></span>
+      </div>
+
+      <div class="offer-side">
+        <div class="offer-reward"></div>
+        <button class="start-button" type="button">Start</button>
+      </div>
+    `;
+
+    card.querySelector("h3").textContent = title;
+    card.querySelector(".offer-details p").textContent = description;
+    card.querySelector(".offer-category").textContent = category;
+    card.querySelector(".offer-reward").textContent = money(reward);
+
+    card.querySelector(".start-button").addEventListener("click", () => {
+      if (!task.id) {
+        alert("This task cannot be opened right now.");
+        return;
+      }
+
+      window.location.href =
+        "task.html?id=" + encodeURIComponent(task.id);
+    });
+
+    container.appendChild(card);
+  });
+}
+
+async function loadOffers() {
+  const {
+    data: authData,
+    error: authError
+  } = await db.auth.getUser();
+
+  if (authError || !authData.user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  const {
+    data,
+    error
+  } = await db.rpc("get_tasknova_member_dashboard");
+
+  if (error) {
+    document.getElementById("offerList").innerHTML = `
+      <div class="empty-state">
+        <div class="icon">⚠️</div>
+        <h3>Offers couldn't load</h3>
+        <p>Please refresh the page and try again.</p>
+      </div>
+    `;
+
+    document.getElementById("offerCount").textContent =
+      "Unavailable";
+
+    return;
+  }
+
+  const result = data || {};
+  const profile = result.profile || {};
+  const fullName =
+    profile.full_name ||
+    authData.user.user_metadata?.full_name ||
+    "Member";
+
+  const firstName = fullName.split(" ")[0];
+
+  document.getElementById("headerName").textContent =
+    firstName;
+
+  document.getElementById("avatar").textContent =
+    firstName.charAt(0).toUpperCase();
+
+  allTasks = Array.isArray(result.tasks)
+    ? result.tasks
+    : [];
+
+  renderTasks();
+}
+
+document.querySelectorAll(".category-tab").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".category-tab").forEach(tab => {
+      tab.classList.remove("active");
+    });
+
+    button.classList.add("active");
+    activeCategory = button.dataset.category;
+
+    renderTasks();
+  });
+});
+
+document.getElementById("searchInput").addEventListener(
+  "input",
+  renderTasks
+);
+
+loadOffers();
+</script>
+
+</body>
+</html>
