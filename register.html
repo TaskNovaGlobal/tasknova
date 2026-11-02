@@ -2,359 +2,201 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Create Account - TaskNova</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#6d28d9">
+<title>Create Account | TaskNova</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  min-height:100vh;
-  font-family:Arial,sans-serif;
-  color:#191722;
-  background:linear-gradient(135deg,#fff 35%,#f5efff);
-  display:flex;
-  flex-direction:column;
-}
-header{
-  background:#fff;
-  border-bottom:1px solid #eeeaf3;
-  padding:18px 22px;
-}
-.brand{
-  display:flex;
-  align-items:center;
-  gap:13px;
-  text-decoration:none;
-  color:#191722;
-  max-width:1100px;
-  margin:auto;
-}
-.brand-icon{
-  width:54px;height:54px;
-  border-radius:18px;
-  background:linear-gradient(135deg,#9863f3,#6336d8);
-  display:grid;place-items:center;
-  color:white;font-size:30px;font-weight:bold;
-  box-shadow:0 8px 20px #8055ed35;
-}
-.brand-name{font-size:25px;font-weight:800}
-.brand-tagline{font-size:13px;color:#85818d;margin-top:4px}
-main{
-  flex:1;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:40px 18px;
-}
-.register-card{
-  width:100%;
-  max-width:480px;
-  background:#fff;
-  border:1px solid #eeeaf4;
-  border-radius:25px;
-  padding:32px 27px;
-  box-shadow:0 18px 55px #4a2b7910;
-}
-.badge{
-  display:inline-block;
-  background:#f2ebff;
-  color:#7040d2;
-  border-radius:30px;
-  padding:9px 15px;
-  font-size:13px;
-  font-weight:700;
-  margin-bottom:20px;
-}
-h1{
-  font-size:31px;
-  line-height:1.2;
-  margin-bottom:10px;
-  letter-spacing:-1px;
-}
-.subtitle{
-  color:#77737f;
-  line-height:1.6;
-  font-size:15px;
-  margin-bottom:24px;
-}
-label{
-  display:block;
-  font-weight:700;
-  font-size:14px;
-  margin-bottom:8px;
-}
-input{
-  width:100%;
-  padding:15px;
-  border:1px solid #e5e1eb;
-  border-radius:12px;
-  font-size:15px;
-  outline:none;
-  margin-bottom:17px;
-  background:#fff;
-  color:#191722;
-}
-input:focus{
-  border-color:#8251e8;
-  box-shadow:0 0 0 3px #8251e815;
-}
-.terms{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  margin:3px 0 20px;
-  color:#77737f;
-  font-size:13px;
-  line-height:1.5;
-}
-.terms input{
-  width:17px;
-  height:17px;
-  margin:1px 0 0;
-  flex-shrink:0;
-  accent-color:#7545d9;
-}
-button{
-  width:100%;
-  padding:17px;
-  border:0;
-  border-radius:13px;
-  background:linear-gradient(110deg,#9560ed,#6635d7);
-  color:white;
-  font-size:16px;
-  font-weight:800;
-  cursor:pointer;
-  box-shadow:0 9px 22px #8055ed35;
-}
+*{box-sizing:border-box}
+body{margin:0;background:#f8f7fc;color:#171329;font-family:Arial,sans-serif}
+header{height:70px;background:white;border-bottom:1px solid #eee9f5;display:flex;align-items:center;justify-content:space-between;padding:0 6%;gap:15px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#171329}
+.logo{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#6d28d9,#a78bfa);display:grid;place-items:center;color:white;font-size:22px;font-weight:bold}
+.brand strong{font-size:20px}
+header a.login{color:#6d28d9;text-decoration:none;font-weight:bold;font-size:14px}
+main{min-height:calc(100vh - 70px);display:flex;align-items:center;justify-content:center;padding:35px 15px}
+.container{width:100%;max-width:490px;background:#fff;border:1px solid #ebe6f3;border-radius:22px;padding:30px;box-shadow:0 12px 40px #24134a0d}
+h1{font-size:29px;margin:0 0 9px;text-align:center}
+.intro{text-align:center;color:#77738a;font-size:14px;line-height:1.6;margin:0 0 25px}
+label{display:block;font-size:13px;font-weight:bold;margin:15px 0 7px;color:#393348}
+input,select{width:100%;padding:14px;border:1px solid #ded8ea;border-radius:11px;font-size:14px;background:#fff;color:#171329;outline:none}
+input:focus,select:focus{border-color:#8b5cf6;box-shadow:0 0 0 3px #8b5cf61c}
+button{width:100%;padding:15px;border:0;border-radius:11px;background:linear-gradient(110deg,#6d28d9,#8b5cf6);color:white;font-size:15px;font-weight:bold;cursor:pointer;margin-top:21px}
 button:disabled{opacity:.6;cursor:not-allowed}
-.message{
-  margin-top:16px;
-  text-align:center;
-  font-size:14px;
-  line-height:1.6;
-  overflow-wrap:anywhere;
-}
-.footer{
-  text-align:center;
-  margin-top:22px;
-  color:#77737f;
-  font-size:14px;
-  line-height:2;
-}
-a{color:#7545d9;text-decoration:none;font-weight:700}
-.security{
-  margin-top:20px;
-  padding:13px;
-  background:#f5fbf7;
-  border-radius:12px;
-  color:#39845c;
-  text-align:center;
-  font-size:13px;
-}
-footer{
-  text-align:center;
-  padding:20px;
-  color:#85818d;
-  font-size:13px;
-}
-@media(max-width:480px){
-  .register-card{padding:27px 21px}
-  h1{font-size:28px}
-}
+.terms{display:flex;align-items:flex-start;gap:9px;margin-top:17px;font-size:12px;line-height:1.5;color:#625d72}
+.terms input{width:16px;height:16px;margin:1px 0 0;flex-shrink:0}
+.terms a,.bottom a{color:#6d28d9;text-decoration:none;font-weight:bold}
+.bottom{text-align:center;font-size:13px;color:#77738a;margin-top:22px}
+#message{display:none;padding:12px;border-radius:10px;margin-bottom:15px;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+.error{background:#fee2e2;color:#991b1b}
+.success{background:#dcfce7;color:#166534}
+.note{background:#f4efff;border-radius:11px;padding:13px;margin-top:18px;color:#5b21b6;font-size:12px;line-height:1.6;text-align:center}
+@media(max-width:500px){header{padding:0 17px}.container{padding:23px 19px}h1{font-size:25px}}
 </style>
 </head>
-
 <body>
 
 <header>
-  <a href="index.html" class="brand">
-    <div class="brand-icon">T</div>
-    <div>
-      <div class="brand-name">TaskNova</div>
-      <div class="brand-tagline">Small tasks. Real rewards.</div>
-    </div>
-  </a>
+<a class="brand" href="index.html">
+<div class="logo">✦</div>
+<strong>TaskNova</strong>
+</a>
+<a class="login" href="login.html">Already have an account? Log in</a>
 </header>
 
 <main>
-  <section class="register-card">
-    <div class="badge">✦ Join TaskNova for free</div>
+<div class="container">
+<h1>Create your account</h1>
+<p class="intro">Join TaskNova and start earning by completing online tasks.</p>
 
-    <h1>Create your account</h1>
-    <p class="subtitle">
-      Sign up to explore online tasks and start your TaskNova journey.
-    </p>
+<div id="message"></div>
 
-    <form id="registerForm">
-      <label for="fullName">Full name</label>
-      <input
-        id="fullName"
-        type="text"
-        placeholder="Enter your full name"
-        autocomplete="name"
-        required
-      >
+<form id="registerForm">
+<label for="fullName">Full name</label>
+<input id="fullName" type="text" placeholder="Enter your full name" required maxlength="100" autocomplete="name">
 
-      <label for="username">Username</label>
-      <input
-        id="username"
-        type="text"
-        placeholder="Choose a username"
-        autocomplete="username"
-        required
-      >
+<label for="username">Username</label>
+<input id="username" type="text" placeholder="Choose a username" required minlength="3" maxlength="30" autocomplete="username">
 
-      <label for="email">Email address</label>
-      <input
-        id="email"
-        type="email"
-        placeholder="Enter your email address"
-        autocomplete="email"
-        required
-      >
+<label for="email">Email address</label>
+<input id="email" type="email" placeholder="you@example.com" required autocomplete="email">
 
-      <label for="country">Country</label>
-      <input
-        id="country"
-        type="text"
-        placeholder="Enter your country"
-        autocomplete="country-name"
-        required
-      >
+<label for="country">Country</label>
+<select id="country" required>
+<option value="">Select your country</option>
+<option>Nigeria</option>
+<option>Ghana</option>
+<option>Kenya</option>
+<option>South Africa</option>
+<option>United States</option>
+<option>United Kingdom</option>
+<option>Canada</option>
+<option>India</option>
+<option>Pakistan</option>
+<option>Bangladesh</option>
+<option>Philippines</option>
+<option>Indonesia</option>
+<option>Malaysia</option>
+<option>Uganda</option>
+<option>Tanzania</option>
+<option>Rwanda</option>
+<option>Egypt</option>
+<option>Morocco</option>
+<option>Other</option>
+</select>
 
-      <label for="referral">Referral code (optional)</label>
-      <input
-        id="referral"
-        type="text"
-        placeholder="Enter a referral code if you have one"
-      >
+<label for="referralCode">Referral code (optional)</label>
+<input id="referralCode" type="text" placeholder="Enter referral code if you have one" maxlength="40">
 
-      <label for="password">Password</label>
-      <input
-        id="password"
-        type="password"
-        placeholder="Create a password"
-        autocomplete="new-password"
-        minlength="6"
-        required
-      >
+<label for="password">Password</label>
+<input id="password" type="password" placeholder="Create a password" required minlength="8" autocomplete="new-password">
 
-      <label for="confirmPassword">Confirm password</label>
-      <input
-        id="confirmPassword"
-        type="password"
-        placeholder="Enter your password again"
-        autocomplete="new-password"
-        minlength="6"
-        required
-      >
+<label for="confirmPassword">Confirm password</label>
+<input id="confirmPassword" type="password" placeholder="Enter your password again" required minlength="8" autocomplete="new-password">
 
-      <div class="terms">
-        <input type="checkbox" id="terms" required>
-        <label for="terms" style="font-weight:400;margin:0">
-          I agree to the TaskNova terms and conditions and privacy policy.
-        </label>
-      </div>
+<div class="terms">
+<input id="agree" type="checkbox" required>
+<span>I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a>.</span>
+</div>
 
-      <button id="registerButton" type="submit">
-        Create free account →
-      </button>
-    </form>
+<button id="submitBtn" type="submit">Create my account</button>
+</form>
 
-    <p id="message" class="message" role="status"></p>
+<div class="note">🔒 Your information is protected. Registration is free. TaskNova does not require a deposit or subscription to join.</div>
 
-    <div class="security">
-      ✓ Free registration. No subscription required.
-    </div>
+<p class="bottom">Already registered? <a href="login.html">Log in</a></p>
+</div>
+                                               </main><script>
+const SUPABASE_URL="https://nplaagzwpthofvounzma.supabase.co";
+const SUPABASE_KEY="sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB";
 
-    <div class="footer">
-      Already have an account?
-      <a href="login.html">Log in</a>
-      <br>
-      <a href="index.html">← Back to homepage</a>
-    </div>
-  </section>
-</main>
+const message=document.getElementById("message");
+const form=document.getElementById("registerForm");
+const submitBtn=document.getElementById("submitBtn");
 
-<footer>
-  © <span id="year"></span> TaskNova. All rights reserved.
-</footer>
+function showMessage(text,type){
+message.textContent=text;
+message.className=type;
+message.style.display="block";
+message.scrollIntoView({behavior:"smooth",block:"center"});
+}
 
-<script type="module">
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+function validUsername(value){
+return /^[a-zA-Z0-9_]{3,30}$/.test(value);
+}
 
-const supabase = createClient(
-  'https://nplaagzwpthofvounzma.supabase.co',
-  'sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB'
-);
+form.addEventListener("submit",async function(event){
+event.preventDefault();
+message.style.display="none";
 
-const form = document.getElementById('registerForm');
-const message = document.getElementById('message');
-const button = document.getElementById('registerButton');
+const fullName=document.getElementById("fullName").value.trim();
+const username=document.getElementById("username").value.trim();
+const email=document.getElementById("email").value.trim().toLowerCase();
+const country=document.getElementById("country").value;
+const referralCode=document.getElementById("referralCode").value.trim();
+const password=document.getElementById("password").value;
+const confirmPassword=document.getElementById("confirmPassword").value;
+const agreed=document.getElementById("agree").checked;
 
-document.getElementById('year').textContent =
-  new Date().getFullYear();
+if(!validUsername(username)){
+showMessage("Username must be 3–30 characters and contain only letters, numbers, or underscores.","error");
+return;
+}
 
-form.addEventListener('submit', async function(event) {
-  event.preventDefault();
+if(password.length<8){
+showMessage("Your password must contain at least 8 characters.","error");
+return;
+}
 
-  const fullName = document.getElementById('fullName').value.trim();
-  const username = document.getElementById('username').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const country = document.getElementById('country').value.trim();
-  const referral = document.getElementById('referral').value.trim();
-  const password = document.getElementById('password').value;
-  const confirmPassword = document.getElementById('confirmPassword').value;
+if(password!==confirmPassword){
+showMessage("Your passwords do not match.","error");
+return;
+}
 
-  message.textContent = '';
+if(!agreed){
+showMessage("Please accept the Terms of Service and Privacy Policy.","error");
+return;
+}
 
-  if (password !== confirmPassword) {
-    message.style.color = '#d33';
-    message.textContent = 'Your passwords do not match.';
-    return;
-  }
+submitBtn.disabled=true;
+submitBtn.textContent="Creating your account...";
 
-  if (password.length < 6) {
-    message.style.color = '#d33';
-    message.textContent = 'Your password must be at least 6 characters.';
-    return;
-  }
+try{
+if(!window.supabase?.createClient){
+throw new Error("Connection library failed to load. Please refresh the page.");
+}
 
-  button.disabled = true;
-  button.textContent = 'Creating account...';
+const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-  try {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: 'https://tasknovaglobal.github.io/tasknova/confirmed.html',
-        data: {
-          full_name: fullName,
-          username: username,
-          country: country,
-          referral_code: referral
-        }
-      }
-    });
+const {data,error}=await client.auth.signUp({
+email:email,
+password:password,
+options:{
+emailRedirectTo:"https://tasknovaglobal.github.io/tasknova/confirmed.html",
+data:{
+full_name:fullName,
+username:username,
+country:country,
+referral_code:referralCode
+}
+}
+});
 
-    if (error) {
-      throw error;
-    }
+if(error)throw error;
 
-    message.style.color = '#278653';
-    message.textContent =
-      'Registration successful! Please check your email for confirmation before logging in.';
+if(data.user && data.user.identities && data.user.identities.length===0){
+throw new Error("An account with this email may already exist. Please log in instead.");
+}
 
-    form.reset();
+showMessage("Your account has been created. Please check your email and click the confirmation link to activate your account.","success");
+form.reset();
 
-  } catch (error) {
-    message.style.color = '#d33';
-    message.textContent = error.message || 'Registration failed. Please try again.';
-  }
-
-  button.disabled = false;
-  button.textContent = 'Create free account →';
+}catch(error){
+showMessage(error.message||"Registration failed. Please try again.","error");
+}finally{
+submitBtn.disabled=false;
+submitBtn.textContent="Create my account";
+}
 });
 </script>
 
