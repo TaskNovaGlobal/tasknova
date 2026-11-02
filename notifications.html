@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications | TaskNova</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #f8f7fb;
+      color: #211d29;
+      padding-bottom: 90px;
+    }
+
+    .header {
+      background: #fff;
+      padding: 17px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #eeeaf3;
+    }
+
+    .brand {
+      font-size: 23px;
+      font-weight: 800;
+      color: #6335d7;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 10px;
+      color: #77717f;
+      font-weight: 400;
+      margin-top: 3px;
+    }
+
+    .avatar {
+      width: 39px;
+      height: 39px;
+      border-radius: 50%;
+      background: #eee8ff;
+      color: #6335d7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 650px;
+      margin: auto;
+      padding: 23px 17px;
+    }
+
+    .page-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .page-heading h1 {
+      font-size: 27px;
+      margin-bottom: 7px;
+    }
+
+    .page-heading p {
+      color: #77717f;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .notification-card {
+      background: #fff;
+      border: 1px solid #eeeaf3;
+      border-radius: 17px;
+      padding: 19px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 13px rgba(30, 20, 50, 0.035);
+    }
+
+    .notification-row {
+      display: flex;
+      gap: 13px;
+      align-items: flex-start;
+    }
+
+    .notification-icon {
+      width: 43px;
+      height: 43px;
+      flex-shrink: 0;
+      border-radius: 13px;
+      background: #f0eaff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .notification-content {
+      flex: 1;
+    }
+
+    .notification-content h3 {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .notification-content p {
+      color: #77717f;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .notification-time {
+      display: block;
+      color: #99919f;
+      font-size: 10px;
+      margin-top: 9px;
+    }
+
+    .empty-state {
+      background: #fff;
+      border: 1px solid #eeeaf3;
+      border-radius: 17px;
+      padding: 45px 20px;
+      text-align: center;
+    }
+
+    .empty-state .empty-icon {
+      font-size: 42px;
+      margin-bottom: 13px;
+    }
+
+    .empty-state h3 {
+      font-size: 16px;
+      margin-bottom: 7px;
+    }
+
+    .empty-state p {
+      color: #88818f;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: #fff;
+      border-top: 1px solid #eeeaf3;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: #898391;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      min-width: 52px;
+    }
+
+    .nav-item span:first-child {
+      font-size: 19px;
+    }
+
+    .nav-item.active {
+      color: #6335d7;
+      font-weight: 700;
+    }
+  </style>
+</head><body>
+
+  <header class="header">
+    <div class="brand">
+      TaskNova
+      <small>Your tasks. Your rewards.</small>
+    </div>
+    <div class="avatar" id="headerAvatar">U</div>
+  </header>
+
+  <main class="container">
+
+    <div class="page-heading">
+      <div>
+        <h1>Notifications</h1>
+        <p>Updates about your TaskNova account.</p>
+      </div>
+    </div>
+
+    <div id="notificationList">
+
+      <div class="notification-card">
+        <div class="notification-row">
+          <div class="notification-icon">🎯</div>
+          <div class="notification-content">
+            <h3>TaskNova Tasks</h3>
+            <p>
+              Check the Offers page regularly to see tasks made available
+              by the administration team.
+            </p>
+            <span class="notification-time">Platform information</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="notification-card">
+        <div class="notification-row">
+          <div class="notification-icon">💰</div>
+          <div class="notification-content">
+            <h3>Wallet Rewards</h3>
+            <p>
+              Approved task rewards are credited to your wallet.
+              Pending submissions are not available for withdrawal.
+            </p>
+            <span class="notification-time">Platform information</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="notification-card">
+        <div class="notification-row">
+          <div class="notification-icon">💳</div>
+          <div class="notification-content">
+            <h3>Withdrawals</h3>
+            <p>
+              The minimum withdrawal amount is $5. Withdrawal requests
+              are reviewed and processed manually.
+            </p>
+            <span class="notification-time">Platform information</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="notification-card">
+        <div class="notification-row">
+          <div class="notification-icon">🎁</div>
+          <div class="notification-content">
+            <h3>Referral Programme</h3>
+            <p>
+              Share your referral link and check your referral page
+              for qualifying activities and rewards.
+            </p>
+            <span class="notification-time">Platform information</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="empty-icon">🔔</div>
+      <h3>No Notifications Yet</h3>
+      <p>
+        When account notifications become available, they will appear here.
+      </p>
+    </div>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-item">
+      <span>🏠</span>
+      <span>Home</span>
+    </a>
+
+    <a href="offers.html" class="nav-item">
+      <span>🎯</span>
+      <span>Offers</span>
+    </a>
+
+    <a href="history.html" class="nav-item">
+      <span>📋</span>
+      <span>History</span>
+    </a>
+
+    <a href="referrals.html" class="nav-item">
+      <span>🎁</span>
+      <span>Refer</span>
+    </a>
+
+    <a href="profile.html" class="nav-item">
+      <span>👤</span>
+      <span>Profile</span>
+    </a>
+  </nav>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const SUPABASE_URL = "https://nplaagzwpthofvounzma.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_L0govATO3SUeAMmbGGMJnw_F-S0jApB";
+
+    const db = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    async function loadNotifications() {
+      const { data, error } = await db.auth.getUser();
+
+      if (error || !data.user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      const { data: dashboard } = await db.rpc(
+        "get_tasknova_member_dashboard"
+      );
+
+      const profile = dashboard?.profile || {};
+      const name = profile.full_name || profile.username || "User";
+
+      document.getElementById("headerAvatar").textContent =
+        name.trim().charAt(0).toUpperCase() || "U";
+    }
+
+    loadNotifications();
+  </script>
+
+</body>
+</html>
