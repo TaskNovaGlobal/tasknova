@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#7041d8">
+  <title>My Profile | TaskNova</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f7fc;
+      color: #171323;
+      padding-bottom: 90px;
+    }
+
+    .header {
+      background: #fff;
+      padding: 17px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #eeeaf5;
+    }
+
+    .brand {
+      font-size: 22px;
+      font-weight: 800;
+      color: #7041d8;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 10px;
+      color: #777;
+      font-weight: 400;
+      margin-top: 3px;
+    }
+
+    .profile-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #7041d8;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: auto;
+      padding: 24px 17px;
+    }
+
+    .page-heading {
+      margin-bottom: 22px;
+    }
+
+    .page-heading h1 {
+      font-size: 27px;
+      margin-bottom: 7px;
+    }
+
+    .page-heading p {
+      color: #77717f;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .profile-card {
+      background: linear-gradient(135deg, #8152e8, #572bb8);
+      color: #fff;
+      border-radius: 19px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 22px rgba(92, 49, 183, .18);
+    }
+
+    .large-avatar {
+      width: 75px;
+      height: 75px;
+      margin: 0 auto 13px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.2);
+      border: 2px solid rgba(255,255,255,.7);
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .profile-card h2 {
+      font-size: 21px;
+      margin-bottom: 6px;
+    }
+
+    .profile-card p {
+      font-size: 12px;
+      opacity: .9;
+    }
+
+    .section-card {
+      background: #fff;
+      border: 1px solid #e9e5ef;
+      border-radius: 16px;
+      padding: 19px;
+      margin-bottom: 17px;
+      box-shadow: 0 3px 10px rgba(25, 15, 50, .035);
+    }
+
+    .section-card h3 {
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px 12px;
+      border: 1px solid #e3ddec;
+      border-radius: 10px;
+      background: #fff;
+      color: #292333;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: #7041d8;
+    }
+
+    .form-group input[readonly] {
+      background: #f7f5fa;
+      color: #77717f;
+    }
+
+    .primary-button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #8152e8, #572bb8);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .primary-button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      padding: 13px;
+      border-radius: 10px;
+      margin-top: 13px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .message.success {
+      display: block;
+      background: #e5f8ed;
+      color: #16834a;
+    }
+
+    .message.error {
+      display: block;
+      background: #ffebeb;
+      color: #c53a3a;
+    }
+
+    .account-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid #f0edf4;
+      text-decoration: none;
+      color: #292333;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .account-link:last-child {
+      border-bottom: none;
+    }
+
+    .account-link span:first-child {
+      font-size: 20px;
+      width: 27px;
+      text-align: center;
+    }
+
+    .logout-button {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #f0d7d7;
+      border-radius: 11px;
+      background: #fff;
+      color: #c53a3a;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: #fff;
+      border-top: 1px solid #eeeaf5;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: #898391;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      min-width: 50px;
+    }
+
+    .nav-item span:first-child {
+      font-size: 20px;
+    }
+
+    .nav-item.active {
+      color: #7041d8;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>  <header class="header">
+    <div class="brand">
+      TaskNova
+      <small>Your tasks. Your rewards.</small>
+    </div>
+    <div class="profile-avatar" id="headerAvatar">U</div>
+  </header>
+
+  <main class="container">
+    <div class="page-heading">
+      <h1>My Profile</h1>
+      <p>Manage your personal information and account settings.</p>
+    </div>
+
+    <section class="profile-card">
+      <div class="large-avatar" id="largeAvatar">U</div>
+      <h2 id="displayName">Loading profile...</h2>
+      <p id="displayEmail">Please wait</p>
+    </section>
+
+    <section class="section-card">
+      <h3>Personal Information</h3>
+
+      <form id="profileForm">
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input id="fullName" type="text" placeholder="Your full name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input id="username" type="text" placeholder="Your username" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input id="email" type="email" readonly>
+        </div>
+
+        <div class="form-group">
+          <label for="country">Country</label>
+          <input id="country" type="text" placeholder="Your country">
+        </div>
+
+        <button class="primary-button" id="saveProfile" type="submit">
+          Save Changes
+        </button>
+
+        <div class="message" id="profileMessage"></div>
+      </form>
+    </section>
+
+    <section class="section-card">
+      <h3>Account Security</h3>
+
+      <div class="form-group">
+        <label for="newPassword">New Password</label>
+        <input
+          id="newPassword"
+          type="password"
+          placeholder="Enter a new password"
+          minlength="8"
+          autocomplete="new-password"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm New Password</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          placeholder="Confirm your new password"
+          minlength="8"
+          autocomplete="new-password"
+        >
+      </div>
+
+      <button class="primary-button" id="changePassword" type="button">
+        Update Password
+      </button>
+
+      <div class="message" id="passwordMessage"></div>
+    </section>
+
+    <section class="section-card">
+      <h3>Account Information</h3>
+
+      <a href="history.html" class="account-link">
+        <span>📋</span>
+        <span>My Task History</span>
+      </a>
+
+      <a href="referrals.html" class="account-link">
+        <span>🎁</span>
+        <span>My Referrals</span>
+      </a>
+
+      <a href="withdraw.html" class="account-link">
+        <span>💳</span>
+        <span>Withdrawal Requests</span>
+      </a>
+
+      <a href="privacy.html" class="account-link">
+        <span>🔒</span>
+        <span>Privacy Policy</span>
+      </a>
+
+      <a href="terms.html" class="account-link">
+        <span>📄</span>
+        <span>Terms and Conditions</span>
+      </a>
+    </section>
+
+    <section class="section-card">
+      <h3>Sign Out</h3>
+      <p style="font-size:12px;color:#77717f;line-height:1.6;margin-bottom:15px;">
+        Sign out of your TaskNova account on this device.
+      </p>
+
+      <button class="logout-button" id="logoutButton" type="button">
+        Sign Out
+      </button>
+      <div class="message" id="logoutMessage"></div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-item">
+      <span>🏠</span>
+      <span>Home</span>
+    </a>
+
+    <a href="offers.html" class="nav-item">
+      <span>🎯</span>
+      <span>Offers</span>
+    </a>
+
+    <a href="history.html" class="nav-item">
+      <span>📋</span>
+      <span>History</span>
+    </a>
+
+    <a href="referrals.html" class="nav-item">
+      <span>🎁</span>
+      <span>Refer</span>
+    </a>
+
+    <a href="profile.html" class="nav-item active">
+      <span>👤</span>
+      <span>Profile</span>
+    </a>
+  </nav>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://nplaagzwpthofvounzma.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB";
+
+    const db = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    const $ = (id) => document.getElementById(id);
+
+    function showMessage(id, message, success = false) {
+      const element = $(id);
+      if (!element) return;
+
+      element.textContent = message;
+      element.className = success
+        ? "message success"
+        : "message error";
+    }
+
+    function setAvatar(name) {
+      const letter = (name || "U").trim().charAt(0).toUpperCase();
+      if ($("headerAvatar")) $("headerAvatar").textContent = letter;
+      if ($("largeAvatar")) $("largeAvatar").textContent = letter;
+    }
+
+    async function loadProfile() {
+      const { data: authData, error: authError } =
+        await db.auth.getUser();
+
+      if (authError || !authData.user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      const user = authData.user;
+
+      const { data, error } = await db.rpc(
+        "get_tasknova_member_dashboard"
+      );
+
+      if (error) {
+        showMessage(
+          "profileMessage",
+          "Unable to load your profile. Please try again."
+        );
+        return;
+      }
+
+      const profile = data?.profile || {};
+
+      $("fullName").value = profile.full_name || "";
+      $("username").value = profile.username || "";
+      $("country").value = profile.country || "";
+      $("email").value = user.email || profile.email || "";
+
+      $("displayName").textContent =
+        profile.full_name || profile.username || "TaskNova Member";
+
+      $("displayEmail").textContent =
+        user.email || profile.email || "";
+
+      setAvatar(profile.full_name || profile.username);
+    }
+
+    $("profileForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const button = $("saveButton");
+      const fullName = $("fullName").value.trim();
+      const username = $("username").value.trim();
+      const country = $("country").value.trim();
+
+      if (!fullName) {
+        showMessage("profileMessage", "Enter your full name.");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Saving...";
+
+      try {
+        const { data: authData, error: authError } =
+          await db.auth.getUser();
+
+        if (authError || !authData.user) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        const { error } = await db
+          .from("profiles")
+          .update({
+            full_name: fullName,
+            username: username,
+            country: country
+          })
+          .eq("id", authData.user.id);
+
+        if (error) throw error;
+
+        $("displayName").textContent = fullName;
+        setAvatar(fullName);
+
+        showMessage(
+          "profileMessage",
+          "Your profile has been updated.",
+          true
+        );
+      } catch (error) {
+        showMessage(
+          "profileMessage",
+          error.message || "Unable to update your profile."
+        );
+      } finally {
+        button.disabled = false;
+        button.textContent = "Save Changes";
+      }
+    });
+
+    $("passwordLink").addEventListener("click", async (event) => {
+      event.preventDefault();
+
+      const email = $("email").value.trim();
+
+      if (!email) {
+        showMessage("accountMessage", "Your email address is unavailable.");
+        return;
+      }
+
+      const { error } = await db.auth.resetPasswordForEmail(email, {
+        redirectTo: "https://tasknovaglobal.github.io/tasknova/login.html"
+      });
+
+      if (error) {
+        showMessage("accountMessage", error.message);
+      } else {
+        showMessage(
+          "accountMessage",
+          "Password reset instructions have been sent to your email.",
+          true
+        );
+      }
+    });
+
+    $("logoutButton").addEventListener("click", async () => {
+      $("logoutButton").disabled = true;
+      $("logoutButton").textContent = "Signing out...";
+
+      const { error } = await db.auth.signOut();
+
+      if (error) {
+        showMessage("accountMessage", error.message);
+        $("logoutButton").disabled = false;
+        $("logoutButton").textContent = "Log Out";
+        return;
+      }
+
+      window.location.href = "login.html";
+    });
+
+    loadProfile();
+  </script>
+</body>
+</html>
