@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#7041d8">
+  <title>Refer & Earn | TaskNova</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f7fc;
+      color: #171323;
+      padding-bottom: 90px;
+    }
+
+    .header {
+      background: #fff;
+      padding: 17px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #eeeaf5;
+    }
+
+    .brand {
+      font-size: 22px;
+      font-weight: 800;
+      color: #7041d8;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 10px;
+      color: #777;
+      font-weight: 400;
+      margin-top: 3px;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #7041d8;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: auto;
+      padding: 24px 17px;
+    }
+
+    .page-heading {
+      margin-bottom: 22px;
+    }
+
+    .page-heading h1 {
+      font-size: 27px;
+      margin-bottom: 7px;
+    }
+
+    .page-heading p {
+      color: #77717f;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, #8152e8, #572bb8);
+      color: #fff;
+      border-radius: 20px;
+      padding: 24px 21px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 22px rgba(92, 49, 183, .18);
+    }
+
+    .hero-icon {
+      font-size: 34px;
+      margin-bottom: 13px;
+    }
+
+    .hero-card h2 {
+      font-size: 23px;
+      line-height: 1.3;
+      margin-bottom: 9px;
+    }
+
+    .hero-card p {
+      font-size: 13px;
+      line-height: 1.6;
+      opacity: .9;
+    }
+
+    .referral-box {
+      background: #fff;
+      border: 1px solid #e9e5ef;
+      border-radius: 16px;
+      padding: 19px;
+      margin-bottom: 17px;
+      box-shadow: 0 3px 10px rgba(25, 15, 50, .035);
+    }
+
+    .referral-box h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .referral-box p {
+      color: #817b89;
+      font-size: 12px;
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    .copy-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .copy-input {
+      flex: 1;
+      min-width: 0;
+      padding: 13px 11px;
+      border: 1px solid #e5dfef;
+      border-radius: 10px;
+      background: #faf9fd;
+      color: #514b5d;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .copy-button {
+      border: none;
+      border-radius: 10px;
+      padding: 0 16px;
+      background: #7041d8;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: #fff;
+      border: 1px solid #e9e5ef;
+      border-radius: 15px;
+      padding: 17px;
+    }
+
+    .stat-icon {
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+
+    .stat-card small {
+      display: block;
+      color: #817b89;
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+
+    .stat-card h3 {
+      font-size: 23px;
+      color: #7041d8;
+    }
+
+    .section-title {
+      font-size: 18px;
+      margin: 24px 0 13px;
+    }
+
+    .steps-card {
+      background: #fff;
+      border: 1px solid #e9e5ef;
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .step {
+      display: flex;
+      gap: 13px;
+      margin-bottom: 18px;
+    }
+
+    .step:last-child {
+      margin-bottom: 0;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #f0eaff;
+      color: #7041d8;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .step h4 {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .step p {
+      color: #817b89;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .message {
+      font-size: 12px;
+      margin-top: 10px;
+      color: #16834a;
+      display: none;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: #fff;
+      border-top: 1px solid #eeeaf5;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: #898391;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      min-width: 50px;
+    }
+
+    .nav-item span:first-child {
+      font-size: 20px;
+    }
+
+    .nav-item.active {
+      color: #7041d8;
+      font-weight: 800;
+    }
+
+    @media (max-width: 360px) {
+      .copy-row {
+        flex-direction: column;
+      }
+
+      .copy-button {
+        padding: 13px;
+      }
+    }
+  </style>
+</head>
+<body><header class="header">
+  <div class="brand">
+    TaskNova
+    <small>Complete tasks. Earn rewards.</small>
+  </div>
+
+  <div class="profile">
+    <span id="headerName">Member</span>
+    <div class="avatar" id="avatar">M</div>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="page-heading">
+    <h1>Refer & Earn</h1>
+    <p>Invite friends to TaskNova and earn referral rewards when they qualify.</p>
+  </div>
+
+  <section class="hero-card">
+    <div class="hero-icon">🎁</div>
+    <h2>Earn with your friends</h2>
+    <p>
+      Share your referral link. When someone joins through your link
+      and completes the required qualifying activity, you may receive
+      the referral reward set by TaskNova.
+    </p>
+  </section>
+
+  <section class="section-card">
+    <h3>Your referral link</h3>
+    <p>Copy and share this link with friends.</p>
+
+    <label class="referral-label" for="referralLink">
+      PERSONAL REFERRAL LINK
+    </label>
+
+    <div class="referral-box">
+      <input
+        type="text"
+        id="referralLink"
+        readonly
+        placeholder="Loading your referral link..."
+      >
+
+      <button
+        class="copy-button"
+        type="button"
+        id="copyLinkButton"
+      >
+        Copy
+      </button>
+    </div>
+
+    <label class="referral-label" for="referralCode">
+      YOUR REFERRAL CODE
+    </label>
+
+    <div class="referral-box">
+      <input
+        type="text"
+        id="referralCode"
+        readonly
+        placeholder="Loading..."
+      >
+
+      <button
+        class="copy-button"
+        type="button"
+        id="copyCodeButton"
+      >
+        Copy
+      </button>
+    </div>
+
+    <div class="message" id="copyMessage"></div>
+  </section>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">👥</div>
+      <div class="stat-value" id="totalReferrals">0</div>
+      <div class="stat-label">Total referrals</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-value" id="pendingReferrals">0</div>
+      <div class="stat-label">Pending referrals</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-value" id="qualifiedReferrals">0</div>
+      <div class="stat-label">Qualified referrals</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-value" id="rewardedReferrals">0</div>
+      <div class="stat-label">Rewarded referrals</div>
+    </div>
+  </div>
+
+  <section class="section-card">
+    <h3>How it works</h3>
+    <p>Start inviting people in three simple steps.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div>
+          <strong>Share your referral link</strong>
+          <p>Send your personal link or code to friends.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div>
+          <strong>Your friend joins TaskNova</strong>
+          <p>They register using your referral link or code.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div>
+          <strong>Receive your referral reward</strong>
+          <p>Your reward is issued when the referral meets the platform's qualifying requirements and is approved.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-card">
+    <h3>Your referrals</h3>
+    <p>See the people who joined through your referral code.</p>
+
+    <div class="referral-list" id="referralList">
+      <p style="text-align:center;color:#888;font-size:13px;padding:15px">
+        Loading referrals...
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<nav class="bottom-nav">
+  <a href="dashboard.html" class="nav-item">
+    <span>⌂</span>
+    <span>Home</span>
+  </a>
+
+  <a href="offers.html" class="nav-item">
+    <span>▣</span>
+    <span>Offers</span>
+  </a>
+
+  <a href="history.html" class="nav-item">
+    <span>◷</span>
+    <span>History</span>
+  </a>
+
+  <a href="referrals.html" class="nav-item active">
+    <span>♧</span>
+    <span>Refer</span>
+  </a>
+
+  <a href="withdraw.html" class="nav-item">
+    <span>＄</span>
+    <span>Withdraw</span>
+  </a>
+</nav><script>
+const SUPABASE_URL = "https://nplaagzwpthofvounzma.supabase.co";
+const SUPABASE_KEY = "sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[character]);
+}
+
+function showCopyMessage(message) {
+  const box = document.getElementById("copyMessage");
+  box.textContent = message;
+  box.style.display = "block";
+
+  setTimeout(() => {
+    box.style.display = "none";
+  }, 2500);
+}
+
+async function copyText(value) {
+  if (!value) {
+    showCopyMessage("Nothing to copy yet.");
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(value);
+    showCopyMessage("Copied successfully!");
+  } catch {
+    const input = document.createElement("textarea");
+    input.value = value;
+    document.body.appendChild(input);
+    input.select();
+
+    try {
+      document.execCommand("copy");
+      showCopyMessage("Copied successfully!");
+    } catch {
+      showCopyMessage("Copy failed. Please copy it manually.");
+    }
+
+    input.remove();
+  }
+}
+
+function referralStatus(status) {
+  const value = String(status || "pending").toLowerCase();
+
+  if (["rewarded", "paid", "completed"].includes(value)) {
+    return {
+      label: "Rewarded",
+      className: "rewarded"
+    };
+  }
+
+  if (["qualified", "approved"].includes(value)) {
+    return {
+      label: "Qualified",
+      className: "qualified"
+    };
+  }
+
+  return {
+    label: "Pending",
+    className: "pending"
+  };
+}
+
+function renderReferrals(referrals) {
+  const list = document.getElementById("referralList");
+
+  if (!Array.isArray(referrals) || referrals.length === 0) {
+    list.innerHTML = `
+      <p style="text-align:center;color:#888;font-size:13px;padding:15px">
+        You haven't referred anyone yet. Share your link to get started.
+      </p>
+    `;
+    return;
+  }
+
+  list.innerHTML = referrals.map(referral => {
+    const status = referralStatus(referral.status);
+
+    const name =
+      referral.referred_name ||
+      referral.member_name ||
+      referral.email ||
+      "TaskNova member";
+
+    const date = referral.created_at
+      ? new Date(referral.created_at).toLocaleDateString()
+      : "Date unavailable";
+
+    return `
+      <div class="referral-item">
+        <div>
+          <strong>${escapeHTML(name)}</strong>
+          <small>${escapeHTML(date)}</small>
+        </div>
+
+        <span class="status ${status.className}">
+          ${status.label}
+        </span>
+      </div>
+    `;
+  }).join("");
+}
+
+async function loadReferralData() {
+  const {
+    data: authData,
+    error: authError
+  } = await db.auth.getUser();
+
+  if (authError || !authData.user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  const {
+    data,
+    error
+  } = await db.rpc("get_tasknova_member_dashboard");
+
+  if (error) {
+    document.getElementById("referralList").innerHTML = `
+      <p style="text-align:center;color:#c53a3a;font-size:13px;padding:15px">
+        Unable to load referral information.
+      </p>
+    `;
+    return;
+  }
+
+  const dashboard = data || {};
+  const profile = dashboard.profile || {};
+  const stats = dashboard.referrals || {};
+
+  const fullName =
+    profile.full_name ||
+    authData.user.user_metadata?.full_name ||
+    "Member";
+
+  document.getElementById("headerName").textContent =
+    fullName.split(" ")[0];
+
+  document.getElementById("avatar").textContent =
+    fullName.charAt(0).toUpperCase();
+
+  const code = profile.invite_code || profile.referral_code || "";
+
+  document.getElementById("referralCode").value = code;
+
+  const referralLink = code
+    ? `${window.location.origin}${window.location.pathname.replace(/referrals\.html$/, "register.html")}?ref=${encodeURIComponent(code)}`
+    : "";
+
+  document.getElementById("referralLink").value = referralLink;
+
+  document.getElementById("totalReferrals").textContent =
+    Number(stats.total || 0);
+
+  document.getElementById("pendingReferrals").textContent =
+    Number(stats.pending || 0);
+
+  document.getElementById("qualifiedReferrals").textContent =
+    Number(stats.qualified || 0);
+
+  document.getElementById("rewardedReferrals").textContent =
+    Number(stats.rewarded || 0);
+
+  renderReferrals(
+    Array.isArray(stats.list) ? stats.list : []
+  );
+}
+
+document.getElementById("copyLinkButton").addEventListener(
+  "click",
+  () => copyText(document.getElementById("referralLink").value)
+);
+
+document.getElementById("copyCodeButton").addEventListener(
+  "click",
+  () => copyText(document.getElementById("referralCode").value)
+);
+
+loadReferralData();
+</script>
+
+</body>
+</html>
