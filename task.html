@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task Details | TaskNova</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --purple:#7138dc;
+  --purple2:#a35af4;
+  --ink:#171421;
+  --muted:#777384;
+  --line:#e9e5f0;
+  --bg:#f8f7fb;
+  --white:#fff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Arial,Helvetica,sans-serif;
+}
+a{text-decoration:none;color:inherit}
+button,input,textarea{font:inherit}
+
+.topbar{
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  padding:15px 5%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+.brand{font-size:23px;font-weight:900;letter-spacing:-1px}
+.brand span{color:var(--purple)}
+.brand small{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:1px;
+  margin-top:3px;
+}
+.profile{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:13px;
+  font-weight:bold;
+}
+.avatar{
+  width:39px;
+  height:39px;
+  border-radius:50%;
+  background:#eee5ff;
+  color:var(--purple);
+  display:grid;
+  place-items:center;
+  font-weight:900;
+}
+.container{
+  max-width:760px;
+  margin:25px auto;
+  padding:0 18px 110px;
+}
+.back-link{
+  display:inline-block;
+  color:var(--purple);
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:20px;
+}
+.heading{margin-bottom:20px}
+.heading h1{font-size:26px;margin:0 0 7px}
+.heading p{font-size:14px;color:var(--muted);margin:0}
+
+.task-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:21px;
+  margin-bottom:16px;
+}
+.task-top{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.task-icon{
+  width:55px;
+  height:55px;
+  border-radius:15px;
+  background:#f0e9ff;
+  display:grid;
+  place-items:center;
+  font-size:25px;
+  flex-shrink:0;
+}
+.task-title{flex:1;min-width:0}
+.task-title h2{font-size:18px;margin:0 0 7px}
+.category{
+  display:inline-block;
+  background:#f3effa;
+  color:#6841a5;
+  border-radius:20px;
+  padding:5px 10px;
+  font-size:10px;
+  font-weight:bold;
+}
+.reward-card{
+  background:linear-gradient(120deg,#7138dc,#a35af4);
+  color:#fff;
+  border-radius:16px;
+  padding:19px;
+  margin-top:18px;
+}
+.reward-card small{font-size:12px;opacity:.9}
+.reward-amount{font-size:30px;font-weight:900;margin-top:7px}
+.section-title{font-size:17px;margin:0 0 12px}
+.description{
+  color:#555162;
+  font-size:14px;
+  line-height:1.7;
+  white-space:pre-wrap;
+}
+.instructions{
+  color:#555162;
+  font-size:14px;
+  line-height:1.7;
+  white-space:pre-wrap;
+}
+.notice{
+  background:#f0eaff;
+  color:#5830a5;
+  padding:13px 15px;
+  border-radius:12px;
+  font-size:12px;
+  line-height:1.6;
+  margin-bottom:17px;
+}
+.form-group{margin-bottom:16px}
+.form-group label{
+  display:block;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+.form-group textarea,
+.form-group input{
+  width:100%;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:11px;
+  padding:13px;
+  outline:none;
+  font-size:14px;
+}
+.form-group textarea{
+  min-height:125px;
+  resize:vertical;
+}
+.form-group textarea:focus,
+.form-group input:focus{
+  border-color:var(--purple);
+}
+.primary-button{
+  width:100%;
+  border:0;
+  border-radius:11px;
+  padding:14px;
+  background:var(--purple);
+  color:#fff;
+  font-size:14px;
+  font-weight:bold;
+}
+.primary-button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+.message{
+  display:none;
+  border-radius:10px;
+  padding:13px;
+  font-size:13px;
+  line-height:1.5;
+  margin-top:13px;
+}
+.message.error{
+  display:block;
+  background:#fff0f0;
+  color:#a32929;
+}
+.message.success{
+  display:block;
+  background:#eaf9ef;
+  color:#23733d;
+}
+.loading,.empty-state{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:30px 18px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+}
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  display:flex;
+  justify-content:space-around;
+  background:#fff;
+  border-top:1px solid var(--line);
+  padding:9px 4px calc(9px + env(safe-area-inset-bottom));
+  z-index:20;
+}
+.bottom-nav a{
+  color:#817b8c;
+  font-size:10px;
+  text-align:center;
+  min-width:55px;
+  font-weight:600;
+}
+.bottom-nav span{
+  display:block;
+  font-size:20px;
+  margin-bottom:4px;
+}
+.bottom-nav a.active{color:var(--purple)}
+
+@media(min-width:700px){
+  .container{padding-left:25px;padding-right:25px}
+}
+</style>
+</head>
+<body><header class="topbar">
+  <a class="brand" href="index.html">
+    Task<span>Nova</span>
+    <small>YOUR TASKS. YOUR REWARDS.</small>
+  </a>
+
+  <div class="profile">
+    <span id="headerName">Member</span>
+    <div class="avatar" id="avatar">T</div>
+  </div>
+</header>
+
+<main class="container">
+
+  <a class="back-link" href="offers.html">← Back to offers</a>
+
+  <section class="heading">
+    <h1>Task details</h1>
+    <p>Read the instructions carefully before starting.</p>
+  </section>
+
+  <div id="taskContent">
+    <div class="loading">Loading task details...</div>
+  </div>
+
+  <section class="task-card" id="submissionCard" hidden>
+    <h2 class="section-title">Submit your proof</h2>
+
+    <div class="notice">
+      Complete the task first. Then provide clear proof of completion.
+      Your reward will be added to your wallet after admin approval.
+    </div>
+
+    <form id="submissionForm">
+
+      <div class="form-group">
+        <label for="proofText">Proof description</label>
+        <textarea
+          id="proofText"
+          placeholder="Explain how you completed the task..."
+          required
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="proofUrl">Proof link (if applicable)</label>
+        <input
+          type="url"
+          id="proofUrl"
+          placeholder="https://example.com/your-proof"
+        >
+      </div>
+
+      <button class="primary-button" id="submitButton" type="submit">
+        Submit proof
+      </button>
+
+      <div class="message" id="formMessage"></div>
+
+    </form>
+  </section>
+
+</main>
+
+<nav class="bottom-nav">
+  <a href="dashboard.html">
+    <span>⌂</span>Home
+  </a>
+
+  <a class="active" href="offers.html">
+    <span>▣</span>Offers
+  </a>
+
+  <a href="history.html">
+    <span>◷</span>History
+  </a>
+
+  <a href="referrals.html">
+    <span>♧</span>Refer
+  </a>
+
+  <a href="withdraw.html">
+    <span>⇧</span>Withdraw
+  </a>
+</nav><script>
+const SUPABASE_URL = "https://nplaagzwpthofvounzma.supabase.co";
+const SUPABASE_KEY = "sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+let currentUser = null;
+let currentTask = null;
+
+const taskId = new URLSearchParams(
+  window.location.search
+).get("id");
+
+function showMessage(text, type) {
+  const box = document.getElementById("formMessage");
+  box.textContent = text;
+  box.className = "message " + type;
+}
+
+function taskIcon(task) {
+  const text = (
+    (task.title || "") + " " +
+    (task.category || "")
+  ).toLowerCase();
+
+  if (text.includes("video")) return "▶️";
+  if (text.includes("survey")) return "📋";
+  if (text.includes("install") || text.includes("app")) return "📱";
+  if (text.includes("review")) return "⭐";
+  if (text.includes("website")) return "🌐";
+  if (text.includes("social")) return "📣";
+
+  return "🎯";
+}
+
+function money(value) {
+  return "$" + Number(value || 0).toFixed(2);
+}
+
+function renderTask(task) {
+  const container = document.getElementById("taskContent");
+
+  const card = document.createElement("section");
+  card.className = "task-card";
+
+  card.innerHTML = `
+    <div class="task-top">
+      <div class="task-icon">${taskIcon(task)}</div>
+
+      <div class="task-title">
+        <h2></h2>
+        <span class="category"></span>
+      </div>
+    </div>
+
+    <div class="reward-card">
+      <small>Task reward</small>
+      <div class="reward-amount"></div>
+    </div>
+
+    <h3 class="section-title" style="margin-top:22px">
+      Description
+    </h3>
+
+    <div class="description"></div>
+
+    <h3 class="section-title" style="margin-top:22px">
+      Instructions
+    </h3>
+
+    <div class="instructions"></div>
+  `;
+
+  card.querySelector(".task-title h2").textContent =
+    task.title || "Task details";
+
+  card.querySelector(".category").textContent =
+    task.category || "Task";
+
+  card.querySelector(".reward-amount").textContent =
+    money(
+      task.reward ??
+      task.reward_amount ??
+      task.amount ??
+      0
+    );
+
+  card.querySelector(".description").textContent =
+    task.description || "No description provided.";
+
+  card.querySelector(".instructions").textContent =
+    task.instructions || task.description || "Follow the task description.";
+
+  container.innerHTML = "";
+  container.appendChild(card);
+
+  document.getElementById("submissionCard").hidden = false;
+}
+
+async function loadTask() {
+  const {
+    data: authData,
+    error: authError
+  } = await db.auth.getUser();
+
+  if (authError || !authData.user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  currentUser = authData.user;
+
+  const {
+    data: dashboard,
+    error: dashboardError
+  } = await db.rpc("get_tasknova_member_dashboard");
+
+  if (dashboardError) {
+    document.getElementById("taskContent").innerHTML =
+      '<div class="empty-state">Unable to load task information. Please try again.</div>';
+    return;
+  }
+
+  const profile = dashboard?.profile || {};
+  const fullName =
+    profile.full_name ||
+    currentUser.user_metadata?.full_name ||
+    "Member";
+
+  const firstName = fullName.split(" ")[0];
+
+  document.getElementById("headerName").textContent = firstName;
+  document.getElementById("avatar").textContent =
+    firstName.charAt(0).toUpperCase();
+
+  if (!taskId) {
+    document.getElementById("taskContent").innerHTML =
+      '<div class="empty-state">No task was selected. Return to the offers page.</div>';
+    return;
+  }
+
+  const tasks = Array.isArray(dashboard?.tasks)
+    ? dashboard.tasks
+    : [];
+
+  currentTask = tasks.find(task =>
+    String(task.id) === String(taskId)
+  );
+
+  if (!currentTask) {
+    document.getElementById("taskContent").innerHTML =
+      '<div class="empty-state">This task is unavailable or no longer active.</div>';
+    return;
+  }
+
+  renderTask(currentTask);
+}
+
+document.getElementById("submissionForm").addEventListener(
+  "submit",
+  async function(event) {
+    event.preventDefault();
+
+    if (!currentUser || !currentTask) {
+      showMessage("Task information is unavailable.", "error");
+      return;
+    }
+
+    const proofText =
+      document.getElementById("proofText").value.trim();
+
+    const proofUrl =
+      document.getElementById("proofUrl").value.trim();
+
+    if (!proofText) {
+      showMessage("Please describe how you completed the task.", "error");
+      return;
+    }
+
+    const button = document.getElementById("submitButton");
+
+    button.disabled = true;
+    button.textContent = "Submitting...";
+
+    /*
+      The submission RPC must validate the task and reward
+      on the server. Never credit the member's wallet here.
+    */
+
+    const { error } = await db.rpc(
+      "submit_task_proof",
+      {
+        p_task_id: currentTask.id,
+        p_proof_text: proofText,
+        p_proof_url: proofUrl || null
+      }
+    );
+
+    if (error) {
+      showMessage(
+        error.message || "Submission failed. Please try again.",
+        "error"
+      );
+
+      button.disabled = false;
+      button.textContent = "Submit proof";
+      return;
+    }
+
+    showMessage(
+      "Your proof has been submitted for admin review.",
+      "success"
+    );
+
+    document.getElementById("submissionForm").reset();
+    button.textContent = "Submitted";
+  }
+);
+
+loadTask();
+</script>
+
+</body>
+</html>
