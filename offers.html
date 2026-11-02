@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offers | TaskNova</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --purple:#7138dc;
+  --purple2:#a35af4;
+  --ink:#171421;
+  --muted:#777384;
+  --line:#e9e5f0;
+  --bg:#f8f7fb;
+  --white:#fff;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+a{text-decoration:none;color:inherit}
+button,input{font:inherit}
+
+.topbar{
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  padding:15px 5%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.brand{
+  font-size:23px;
+  font-weight:900;
+  letter-spacing:-1px;
+}
+
+.brand span{color:var(--purple)}
+
+.brand small{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:1px;
+  margin-top:3px;
+}
+
+.profile{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.avatar{
+  width:39px;
+  height:39px;
+  border-radius:50%;
+  background:#eee5ff;
+  color:var(--purple);
+  display:grid;
+  place-items:center;
+  font-weight:900;
+}
+
+.container{
+  max-width:1050px;
+  margin:25px auto;
+  padding:0 18px 100px;
+}
+
+.page-heading{margin-bottom:22px}
+
+.page-heading h1{
+  font-size:27px;
+  margin:0 0 7px;
+}
+
+.page-heading p{
+  color:var(--muted);
+  font-size:14px;
+  margin:0;
+}
+
+.offer-banner{
+  background:linear-gradient(120deg,#7138dc,#a35af4);
+  color:#fff;
+  border-radius:19px;
+  padding:24px;
+  margin-bottom:23px;
+  box-shadow:0 12px 28px #7138dc25;
+}
+
+.offer-banner .tag{
+  display:inline-block;
+  background:#ffffff25;
+  border:1px solid #ffffff55;
+  padding:6px 10px;
+  border-radius:20px;
+  font-size:11px;
+  margin-bottom:13px;
+}
+
+.offer-banner h2{
+  font-size:23px;
+  margin:0 0 8px;
+}
+
+.offer-banner p{
+  font-size:13px;
+  line-height:1.6;
+  margin:0;
+  opacity:.9;
+}
+
+.search-box{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:13px 15px;
+  margin-bottom:17px;
+}
+
+.search-box span{font-size:18px}
+
+.search-box input{
+  border:0;
+  outline:none;
+  width:100%;
+  font-size:14px;
+  background:transparent;
+  color:var(--ink);
+}
+
+.category-tabs{
+  display:flex;
+  gap:9px;
+  overflow-x:auto;
+  padding-bottom:8px;
+  margin-bottom:18px;
+  scrollbar-width:none;
+}
+
+.category-tabs::-webkit-scrollbar{display:none}
+
+.category-tab{
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--muted);
+  border-radius:25px;
+  padding:10px 17px;
+  white-space:nowrap;
+  font-size:12px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.category-tab.active{
+  background:var(--purple);
+  border-color:var(--purple);
+  color:#fff;
+}
+
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:20px 0 13px;
+}
+
+.section-title h2{
+  font-size:19px;
+  margin:0;
+}
+
+.section-title span{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.offer-list{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:13px;
+}
+
+.offer-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:16px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  box-shadow:0 3px 10px #21143b05;
+}
+
+.offer-icon{
+  width:49px;
+  height:49px;
+  flex-shrink:0;
+  border-radius:14px;
+  background:#f0e9ff;
+  display:grid;
+  place-items:center;
+  font-size:23px;
+}
+
+.offer-details{
+  flex:1;
+  min-width:0;
+}
+
+.offer-details h3{
+  font-size:14px;
+  margin:0 0 6px;
+}
+
+.offer-details p{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+  margin:0 0 8px;
+}
+
+.offer-category{
+  display:inline-block;
+  background:#f3effa;
+  color:#6841a5;
+  border-radius:20px;
+  padding:5px 9px;
+  font-size:10px;
+  font-weight:bold;
+}
+
+.offer-side{
+  text-align:right;
+  flex-shrink:0;
+}
+
+.offer-reward{
+  color:var(--purple);
+  font-size:16px;
+  font-weight:900;
+  margin-bottom:9px;
+}
+
+.start-button{
+  border:0;
+  background:var(--purple);
+  color:#fff;
+  border-radius:9px;
+  padding:9px 13px;
+  font-size:12px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.empty-state{
+  background:#fff;
+  border:1px dashed #d8d0e5;
+  border-radius:16px;
+  text-align:center;
+  padding:35px 15px;
+  color:var(--muted);
+}
+
+.empty-state .icon{
+  font-size:35px;
+  margin-bottom:10px;
+}
+
+.empty-state h3{
+  color:var(--ink);
+  font-size:16px;
+  margin:0 0 7px;
+}
+
+.empty-state p{
+  font-size:13px;
+  margin:0;
+}
+
+.loading{
+  text-align:center;
+  padding:35px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  display:flex;
+  justify-content:space-around;
+  background:#fff;
+  border-top:1px solid var(--line);
+  padding:9px 4px calc(9px + env(safe-area-inset-bottom));
+  z-index:20;
+}
+
+.bottom-nav a{
+  color:#817b8c;
+  font-size:10px;
+  text-align:center;
+  min-width:55px;
+  font-weight:600;
+}
+
+.bottom-nav span{
+  display:block;
+  font-size:20px;
+  margin-bottom:4px;
+}
+
+.bottom-nav a.active{color:var(--purple)}
+
+@media(min-width:700px){
+  .offer-list{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:520px){
+  .offer-card{gap:9px;padding:12px}
+  .offer-icon{width:42px;height:42px;font-size:20px}
+  .offer-details h3{font-size:13px}
+  .offer-reward{font-size:14px}
+  .start-button{padding:8px 10px}
+}
+</style>
+</head>
+<body>
