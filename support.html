@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help & Support | TaskNova</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #f8f7fb;
+      color: #211d29;
+      padding-bottom: 90px;
+    }
+
+    .header {
+      background: #fff;
+      padding: 17px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #eeeaf3;
+    }
+
+    .brand {
+      font-size: 23px;
+      font-weight: 800;
+      color: #6335d7;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 10px;
+      color: #77717f;
+      font-weight: 400;
+      margin-top: 3px;
+    }
+
+    .avatar {
+      width: 39px;
+      height: 39px;
+      border-radius: 50%;
+      background: #eee8ff;
+      color: #6335d7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 650px;
+      margin: auto;
+      padding: 23px 17px;
+    }
+
+    .page-heading {
+      margin-bottom: 22px;
+    }
+
+    .page-heading h1 {
+      font-size: 27px;
+      margin-bottom: 7px;
+    }
+
+    .page-heading p {
+      color: #77717f;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .support-hero {
+      background: linear-gradient(135deg, #7545e8, #5125bd);
+      color: #fff;
+      padding: 23px;
+      border-radius: 19px;
+      margin-bottom: 20px;
+    }
+
+    .support-hero .icon {
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .support-hero h2 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .support-hero p {
+      font-size: 12px;
+      line-height: 1.7;
+      color: #eee7ff;
+    }
+
+    .support-card {
+      background: #fff;
+      border: 1px solid #eeeaf3;
+      border-radius: 17px;
+      padding: 19px;
+      margin-bottom: 17px;
+      box-shadow: 0 4px 13px rgba(30, 20, 50, 0.035);
+    }
+
+    .support-card h3 {
+      font-size: 16px;
+      margin-bottom: 14px;
+    }
+
+    .support-option {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 13px 0;
+      border-bottom: 1px solid #f0edf4;
+      color: #292431;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .support-option:last-child {
+      border-bottom: none;
+    }
+
+    .support-icon {
+      width: 39px;
+      height: 39px;
+      border-radius: 12px;
+      background: #f0eaff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .support-option small {
+      display: block;
+      color: #88818f;
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    .faq-item {
+      padding: 14px 0;
+      border-bottom: 1px solid #f0edf4;
+    }
+
+    .faq-item:last-child {
+      border-bottom: none;
+    }
+
+    .faq-question {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .faq-answer {
+      color: #77717f;
+      font-size: 12px;
+      line-height: 1.7;
+      margin-top: 8px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: #fff;
+      border-top: 1px solid #eeeaf3;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: #898391;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      min-width: 52px;
+    }
+
+    .nav-item span:first-child {
+      font-size: 19px;
+    }
+
+    .nav-item.active {
+      color: #6335d7;
+      font-weight: 700;
+    }
+  </style>
+  </head><body>
+
+  <header class="header">
+    <div class="brand">
+      TaskNova
+      <small>Your tasks. Your rewards.</small>
+    </div>
+    <div class="avatar" id="headerAvatar">U</div>
+  </header>
+
+  <main class="container">
+
+    <div class="page-heading">
+      <h1>Help & Support</h1>
+      <p>Find answers to common questions and get help with your account.</p>
+    </div>
+
+    <section class="support-hero">
+      <div class="icon">💬</div>
+      <h2>How can we help you?</h2>
+      <p>
+        Having trouble with tasks, payments, referrals or your account?
+        Check the answers below or contact our support team.
+      </p>
+    </section>
+
+    <section class="support-card">
+      <h3>Contact Support</h3>
+
+      <a href="mailto:support@tasknova.com" class="support-option">
+        <span class="support-icon">✉️</span>
+        <span>
+          Email Support
+          <small>Send us a message about your issue</small>
+        </span>
+      </a>
+
+      <a href="history.html" class="support-option">
+        <span class="support-icon">📋</span>
+        <span>
+          Task Submissions
+          <small>Check the status of your submitted tasks</small>
+        </span>
+      </a>
+
+      <a href="withdraw.html" class="support-option">
+        <span class="support-icon">💳</span>
+        <span>
+          Withdrawal Help
+          <small>View your withdrawal requests</small>
+        </span>
+      </a>
+    </section>
+
+    <section class="support-card">
+      <h3>Frequently Asked Questions</h3>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          1. How do I earn on TaskNova?
+        </div>
+        <div class="faq-answer">
+          Browse available tasks, follow the instructions and submit the
+          required proof. Your reward is credited after an administrator
+          reviews and approves your submission.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          2. When will my task reward appear?
+        </div>
+        <div class="faq-answer">
+          Rewards are added to your wallet after your task submission
+          has been approved. Pending submissions do not count as
+          available wallet balance.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          3. What is the minimum withdrawal?
+        </div>
+        <div class="faq-answer">
+          The minimum withdrawal amount on TaskNova is $5. You must
+          have at least this amount in your available balance before
+          requesting a withdrawal.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          4. How long do withdrawals take?
+        </div>
+        <div class="faq-answer">
+          Withdrawal requests are reviewed by the TaskNova administration
+          team. Processing time may vary depending on the payment method
+          and review process.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          5. Why was my task rejected?
+        </div>
+        <div class="faq-answer">
+          A submission may be rejected if the instructions were not
+          followed, the proof is incomplete, or the submitted work
+          cannot be verified.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          6. How does the referral programme work?
+        </div>
+        <div class="faq-answer">
+          Share your referral link with others. Referral rewards depend
+          on the programme rules and qualifying activities configured
+          by TaskNova.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          7. Can I create multiple accounts?
+        </div>
+        <div class="faq-answer">
+          Use only accounts permitted by TaskNova's terms. Suspicious
+          or abusive account activity may lead to account restrictions.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          8. I cannot log in. What should I do?
+        </div>
+        <div class="faq-answer">
+          Check that your email and password are correct. If you forgot
+          your password, use the password reset option on the login page.
+        </div>
+      </div>
+    </section>
+
+    <section class="support-card">
+      <h3>Still Need Help?</h3>
+      <p style="font-size:12px;color:#77717f;line-height:1.7;">
+        If your issue is not covered above, contact the support team
+        with your registered email address and a clear description
+        of the problem.
+      </p>
+
+      <a
+        href="mailto:support@tasknova.com?subject=TaskNova%20Support"
+        style="display:block;text-align:center;background:linear-gradient(135deg,#7545e8,#5125bd);color:white;text-decoration:none;padding:14px;border-radius:12px;font-size:13px;font-weight:700;margin-top:16px;"
+      >
+        Contact Support
+      </a>
+    </section>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-item">
+      <span>🏠</span>
+      <span>Home</span>
+    </a>
+
+    <a href="offers.html" class="nav-item">
+      <span>🎯</span>
+      <span>Offers</span>
+    </a>
+
+    <a href="history.html" class="nav-item">
+      <span>📋</span>
+      <span>History</span>
+    </a>
+
+    <a href="referrals.html" class="nav-item">
+      <span>🎁</span>
+      <span>Refer</span>
+    </a>
+
+    <a href="profile.html" class="nav-item">
+      <span>👤</span>
+      <span>Profile</span>
+    </a>
+      </nav>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const SUPABASE_URL = "https://nplaagzwpthofvounzma.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_L0govATO3SUeAMmbGGMJnw_F-S0jApB";
+
+    const db = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    async function loadSupportPage() {
+      const { data, error } = await db.auth.getUser();
+
+      if (error || !data.user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      const { data: dashboard } = await db.rpc(
+        "get_tasknova_member_dashboard"
+      );
+
+      const profile = dashboard?.profile || {};
+      const name = profile.full_name || profile.username || "User";
+
+      document.getElementById("headerAvatar").textContent =
+        name.trim().charAt(0).toUpperCase() || "U";
+    }
+
+    loadSupportPage();
+  </script>
+
+</body>
+</html>
