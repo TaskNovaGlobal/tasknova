@@ -3,179 +3,256 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - TaskNova</title>
+<title>Log in - TaskNova</title>
 
 <style>
-* {
-    box-sizing: border-box;
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  min-height:100vh;
+  font-family:Arial,sans-serif;
+  color:#191722;
+  background:linear-gradient(135deg,#fff 35%,#f5efff);
+  display:flex;
+  flex-direction:column;
 }
-
-body {
-    margin: 0;
-    min-height: 100vh;
-    background: #080d20;
-    color: white;
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+header{
+  background:#fff;
+  border-bottom:1px solid #eeeaf3;
+  padding:18px 22px;
 }
-
-.container {
-    width: 100%;
-    max-width: 420px;
-    background: #151c35;
-    padding: 35px 28px;
-    border-radius: 18px;
-    box-shadow: 0 10px 40px rgba(0,0,0,.3);
+.brand{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  text-decoration:none;
+  color:#191722;
+  max-width:1100px;
+  margin:auto;
 }
-
-.logo {
-    text-align: center;
-    color: #a78bfa;
-    font-size: 30px;
-    font-weight: bold;
+.brand-icon{
+  width:54px;height:54px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#9863f3,#6336d8);
+  display:grid;place-items:center;
+  color:white;font-size:30px;font-weight:bold;
+  box-shadow:0 8px 20px #8055ed35;
 }
-
-h2 {
-    text-align: center;
+.brand-name{font-size:25px;font-weight:800}
+.brand-tagline{font-size:13px;color:#85818d;margin-top:4px}
+main{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:45px 18px;
 }
-
-.subtitle {
-    text-align: center;
-    color: #aab2ca;
-    margin-bottom: 25px;
+.login-card{
+  width:100%;
+  max-width:440px;
+  background:#fff;
+  border:1px solid #eeeaf4;
+  border-radius:25px;
+  padding:35px 28px;
+  box-shadow:0 18px 55px #4a2b7910;
 }
-
-input {
-    width: 100%;
-    padding: 15px;
-    margin-bottom: 17px;
-    background: #0c1329;
-    border: 1px solid #35405e;
-    border-radius: 9px;
-    color: white;
-    font-size: 15px;
+.badge{
+  display:inline-block;
+  background:#f2ebff;
+  color:#7040d2;
+  border-radius:30px;
+  padding:9px 15px;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:22px;
 }
-
-button {
-    width: 100%;
-    padding: 15px;
-    background: #8055ed;
-    color: white;
-    border: none;
-    border-radius: 9px;
-    font-size: 16px;
-    font-weight: bold;
+h1{
+  font-size:32px;
+  line-height:1.2;
+  margin-bottom:10px;
+  letter-spacing:-1px;
 }
-
-button:disabled {
-    opacity: .6;
+.subtitle{
+  color:#77737f;
+  line-height:1.6;
+  font-size:15px;
+  margin-bottom:27px;
 }
-
-.message {
-    text-align: center;
-    margin-top: 15px;
-    line-height: 1.5;
+label{
+  display:block;
+  font-weight:700;
+  font-size:14px;
+  margin-bottom:9px;
 }
-
-.footer {
-    text-align: center;
-    margin-top: 25px;
-    color: #aab2ca;
-    font-size: 14px;
+input{
+  width:100%;
+  padding:16px;
+  border:1px solid #e5e1eb;
+  border-radius:12px;
+  font-size:15px;
+  outline:none;
+  margin-bottom:19px;
+  background:#fff;
+  color:#191722;
 }
-
-a {
-    color: #b69aff;
-    text-decoration: none;
+input:focus{
+  border-color:#8251e8;
+  box-shadow:0 0 0 3px #8251e815;
+}
+button{
+  width:100%;
+  padding:17px;
+  border:0;
+  border-radius:13px;
+  background:linear-gradient(110deg,#9560ed,#6635d7);
+  color:white;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 9px 22px #8055ed35;
+}
+button:disabled{opacity:.6;cursor:not-allowed}
+.message{
+  margin-top:16px;
+  text-align:center;
+  font-size:14px;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+.footer{
+  text-align:center;
+  margin-top:25px;
+  color:#77737f;
+  font-size:14px;
+  line-height:2;
+}
+a{color:#7545d9;text-decoration:none;font-weight:700}
+.security{
+  margin-top:23px;
+  padding:13px;
+  background:#f5fbf7;
+  border-radius:12px;
+  color:#39845c;
+  text-align:center;
+  font-size:13px;
+}
+footer{
+  text-align:center;
+  padding:20px;
+  color:#85818d;
+  font-size:13px;
+}
+@media(max-width:480px){
+  .login-card{padding:29px 22px}
+  h1{font-size:29px}
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<header>
+  <a href="index.html" class="brand">
+    <div class="brand-icon">T</div>
+    <div>
+      <div class="brand-name">TaskNova</div>
+      <div class="brand-tagline">Small tasks. Real rewards.</div>
+    </div>
+  </a>
+</header>
 
-    <div class="logo">TaskNova</div>
+<main>
+  <section class="login-card">
+    <div class="badge">✦ Welcome back</div>
 
-    <h2>Welcome Back!</h2>
-
-    <p class="subtitle">Login to your TaskNova account.</p>
+    <h1>Log in to TaskNova</h1>
+    <p class="subtitle">
+      Welcome back! Enter your account details to continue to your dashboard.
+    </p>
 
     <form id="loginForm">
+      <label for="email">Email address</label>
+      <input
+        id="email"
+        type="email"
+        placeholder="Enter your email address"
+        autocomplete="email"
+        required
+      >
 
-        <input
-            id="email"
-            type="email"
-            placeholder="Email Address"
-            required
-        >
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        placeholder="Enter your password"
+        autocomplete="current-password"
+        required
+      >
 
-        <input
-            id="password"
-            type="password"
-            placeholder="Password"
-            required
-        >
-
-        <button id="loginButton" type="submit">
-            Login
-        </button>
-
+      <button id="loginButton" type="submit">Log in →</button>
     </form>
 
-    <p id="message" class="message"></p>
+    <p id="message" class="message" role="status"></p>
 
-    <div class="footer">
-        Don't have an account?
-        <a href="register.html">Create Account</a>
-        <br><br>
-        <a href="index.html">Back to Home</a>
+    <div class="security">
+      ✓ Your account is protected by secure authentication.
     </div>
 
-</div>
+    <div class="footer">
+      Don't have an account?
+      <a href="register.html">Create a free account</a>
+      <br>
+      <a href="index.html">← Back to homepage</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © <span id="year"></span> TaskNova. All rights reserved.
+</footer>
 
 <script type="module">
-
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const supabase = createClient(
-    'https://nplaagzwpthofvounzma.supabase.co',
-    'sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB'
+  'https://nplaagzwpthofvounzma.supabase.co',
+  'sb_publishable_L0govATO3SUeAMmbGGMjNw_F-S0jApB'
 );
 
 const form = document.getElementById('loginForm');
 const message = document.getElementById('message');
 const button = document.getElementById('loginButton');
 
+document.getElementById('year').textContent =
+  new Date().getFullYear();
+
 form.addEventListener('submit', async function(event) {
+  event.preventDefault();
 
-    event.preventDefault();
+  button.disabled = true;
+  button.textContent = 'Logging in...';
+  message.textContent = '';
 
-    button.disabled = true;
-    button.textContent = 'Logging in...';
-
+  try {
     const { error } = await supabase.auth.signInWithPassword({
-
-        email: document.getElementById('email').value.trim(),
-
-        password: document.getElementById('password').value
-
+      email: document.getElementById('email').value.trim(),
+      password: document.getElementById('password').value
     });
 
-    button.disabled = false;
-    button.textContent = 'Login';
-
     if (error) {
-        message.textContent = error.message;
+      message.style.color = '#d33';
+      message.textContent = error.message;
     } else {
-    window.location.href = 'dashboard.html';
+      message.style.color = '#278653';
+      message.textContent = 'Login successful! Your account is connected.';
     }
+  } catch (error) {
+    message.style.color = '#d33';
+    message.textContent = 'Unable to log in. Please try again.';
+  }
 
+  button.disabled = false;
+  button.textContent = 'Log in →';
 });
-
 </script>
 
 </body>
